@@ -7,8 +7,7 @@ La API está desarrollada utilizando Express (Node.js) y Mongoose (MongoDB) como
 Node.js (versión X.X.X)
 MongoDB (versión X.X.X)
 
-- Instalación
-Clona este repositorio en tu máquina local:
+- Clona este repositorio en tu máquina local:
 git clone https://github.com/tu_usuario/sistema-estadias-api.git
 
 - Instala las dependencias del proyecto:
