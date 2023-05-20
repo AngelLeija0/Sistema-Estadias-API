@@ -5,11 +5,11 @@ const seguimientoSchema = new mongoose.Schema(
   {
     idAsesor: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Asesor'
+      ref: 'asesores'
     },
     idEstudiante: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Estudiante'
+      ref: 'estudiantes'
     },
     emailEmpresario: String,
     telfEmpresario: String,

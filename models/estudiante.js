@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 // Esquema de la colección Estudiantes
 const estudianteSchema = new mongoose.Schema(
   {
-    idCarrera: {
+    idArea: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Carrera'
+      ref: 'areas'
     },
     nombreEstudiante: String,
     apPaternoEstudiante: String,

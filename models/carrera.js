@@ -8,7 +8,7 @@ const carreraSchema = new mongoose.Schema(
     directorCarrera: String
   },
   {
-    collection: 'asesores'
+    collection: 'carreras'
   }
 );
 

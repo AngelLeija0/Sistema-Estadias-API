@@ -5,7 +5,7 @@ const avanceSchema = new mongoose.Schema(
   {
     idCPA: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'CPA'
+      ref: 'cpas'
     },
     etapa1: String,
     etapa1Fecha: Date,

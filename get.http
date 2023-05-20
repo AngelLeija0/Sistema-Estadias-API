@@ -1,0 +1,3 @@
+GET  https://sistema-estadias-api-production.up.railway.app/administradores
+Content-Type: application/json
+

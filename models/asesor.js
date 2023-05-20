@@ -5,7 +5,7 @@ const asesorSchema = new mongoose.Schema(
   {
     idCarrera: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Carrera'
+      ref: 'carreras'
     },
     nombreAsesor: String,
     apPaternoAsesor: String,

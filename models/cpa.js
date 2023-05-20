@@ -5,23 +5,23 @@ const cpaSchema = new mongoose.Schema(
   {
     idEstudiante: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Estudiante'
+      ref: 'estudiantes'
     },
     idGrado: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Grado'
+      ref: 'grados'
     },
     idGrupo: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Grupo'
+      ref: 'grupos'
     },
     idPeriodo: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Periodo'
+      ref: 'periodos'
     },
     idTurno: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Turno'
+      ref: 'turnos'
     },
     telefono: String,
     nss: String,
