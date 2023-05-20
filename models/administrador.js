@@ -13,4 +13,3 @@ const administradorSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model('Administrador', administradorSchema);
-

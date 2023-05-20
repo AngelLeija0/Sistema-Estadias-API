@@ -1,8 +1,0 @@
-POST http://localhost:3000/administradores
-Content-Type: application/json
-
-{
-  "nombreAdmin": "Angel Leija",
-  "emailAdmin": "angel@gmail.com",
-  "passwordAdmin": "12345678"
-}
