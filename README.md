@@ -17,4 +17,4 @@ git clone https://github.com/tu_usuario/sistema-estadias-api.git
 - Inicia el servidor:
   npm start
   
-* El servidor estará disponible en http://localhost:3000 *
+- El servidor estará disponible en http://localhost:3000
