@@ -9,13 +9,13 @@ MongoDB (versión X.X.X)
 
 - Instalación
 Clona este repositorio en tu máquina local:
-  git clone https://github.com/tu_usuario/sistema-estadias-api.git
+git clone https://github.com/tu_usuario/sistema-estadias-api.git
 
-Instala las dependencias del proyecto:
+- Instala las dependencias del proyecto:
   cd sistema-estadias-api
   npm install
 
-Inicia el servidor:
+- Inicia el servidor:
   npm start
   
 * El servidor estará disponible en http://localhost:3000 *
