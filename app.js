@@ -7,7 +7,9 @@ require('dotenv').config();
 const cors = require('cors');
 app.use(cors());
 
-mongoose.connect(process.env.MONGODB_URI + '/sistema-estadias-db', { useNewUrlParser: true, useUnifiedTopology: true, writeConcern: 'majority', dbName: 'sistema-estadias-db' });
+const mongodbUri = 'mongodb+srv://admin:admin12345678@project0.gpd05zf.mongodb.net/?retryWrites=true&w=majority';
+
+mongoose.connect(mongodbUri + '/sistema-estadias-db', { useNewUrlParser: true, useUnifiedTopology: true, writeConcern: 'majority', dbName: 'sistema-estadias-db' });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
