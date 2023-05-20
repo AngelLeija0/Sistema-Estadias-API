@@ -1,0 +1,8 @@
+POST http://localhost:3000/carreras
+Content-Type: application/json
+
+{
+  "nombreCarrera": "Tecnologias de la Informacion",
+  "descripcionCarrera": "Carrera de TI",
+  "directorCarrera": "Angel"
+}
