@@ -12,6 +12,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET - Obtener grado por id
+router.get('/:id', async (req, res) => {
+  try {
+    const grado = await Grado.find(req.body.id);
+    res.json(grado);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // POST - Crear un nuevo grado
 router.post('/', async (req, res) => {
   try {

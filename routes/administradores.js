@@ -12,6 +12,16 @@ router.get('/', async (req, res) => {
     }
 });
 
+// GET - Obtener administrador por id
+router.get('/:data', async (req, res) => {
+    try {
+        const administrador = await Administrador.find(req.params.data);
+        res.json(administrador);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // POST - Crear un nuevo administrador
 router.post('/', async (req, res) => {
     try {

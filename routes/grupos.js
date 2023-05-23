@@ -12,6 +12,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET - Obtener grupo por id
+router.get('/:id', async (req, res) => {
+  try {
+    const grupo = await Grupo.find(req.body.id);
+    res.json(grupo);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // POST - Crear un nuevo grupo
 router.post('/', async (req, res) => {
   try {

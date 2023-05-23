@@ -12,6 +12,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET - Obtener avance por id
+router.get('/:id', async (req, res) => {
+  try {
+    const avance = await Avance.find(req.body.id);
+    res.json(avance);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // POST - Crear un nuevo avance
 router.post('/', async (req, res) => {
   try {

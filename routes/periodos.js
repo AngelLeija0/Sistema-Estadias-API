@@ -12,6 +12,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET - Obtener periodo por id
+router.get('/:id', async (req, res) => {
+  try {
+    const periodo = await Periodo.find(req.body.id);
+    res.json(periodo);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // POST - Crear un nuevo periodo
 router.post('/', async (req, res) => {
   try {

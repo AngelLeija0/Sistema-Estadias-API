@@ -12,6 +12,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET - Obtener turno por id
+router.get('/:id', async (req, res) => {
+  try {
+    const turno = await Turno.find(req.body.id);
+    res.json(turno);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // POST - Crear un nuevo turno
 router.post('/', async (req, res) => {
   try {

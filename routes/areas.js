@@ -12,6 +12,16 @@ router.get('/', async (req, res) => {
     }
 });
 
+// GET - Obtener area por id
+router.get('/:id', async (req, res) => {
+    try {
+        const area = await Area.find(req.body.id);
+        res.json(area);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // POST - Crear una nueva Area
 router.post('/', async (req, res) => {
     try {

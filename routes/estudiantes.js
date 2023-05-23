@@ -12,6 +12,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET - Obtener estudiante por id
+router.get('/:id', async (req, res) => {
+  try {
+    const estudiante = await Estudiante.find(req.body.id);
+    res.json(estudiante);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // POST - Crear un nuevo estudiante
 router.post('/', async (req, res) => {
   try {

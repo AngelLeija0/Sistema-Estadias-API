@@ -1,12 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const Seguimiento = require('../models/seguimiento');
+const { exists } = require('../models/administrador');
 
 // GET - Obtener todos los seguimientos
 router.get('/', async (req, res) => {
   try {
     const seguimientos = await Seguimiento.find();
     res.json(seguimientos);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// GET - Obtener seguimiento por id
+router.get('/:id', async (req, res) => {
+  try {
+    const seguimiento = await Seguimiento.find(req.body.id);
+    res.json(seguimiento);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

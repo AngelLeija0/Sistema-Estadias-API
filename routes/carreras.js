@@ -12,6 +12,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET - Obtener carrera por id
+router.get('/:id', async (req, res) => {
+  try {
+    const carrera = await Carrera.find(req.body.id);
+    res.json(carrera);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // POST - Crear una nueva carrera
 router.post('/', async (req, res) => {
   try {

@@ -12,6 +12,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET - Obtener asesor por id
+router.get('/:id', async (req, res) => {
+  try {
+    const asesor = await Asesor.find(req.body.id);
+    res.json(asesor);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // POST - Crear un nuevo asesor
 router.post('/', async (req, res) => {
   try {
