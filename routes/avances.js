@@ -13,9 +13,9 @@ router.get('/', async (req, res) => {
 });
 
 // GET - Obtener avance por id
-router.get('/:id', async (req, res) => {
+router.get('/id/:id', async (req, res) => {
   try {
-    const avance = await Avance.findById(req.body.id);
+    const avance = await Avance.findById(req.params.id);
     res.json(avance);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -13,9 +13,9 @@ router.get('/', async (req, res) => {
 });
 
 // GET - Obtener grupo por id
-router.get('/:id', async (req, res) => {
+router.get('/id/:id', async (req, res) => {
   try {
-    const grupo = await Grupo.findById(req.body.id);
+    const grupo = await Grupo.findById(req.params.id);
     res.json(grupo);
   } catch (error) {
     res.status(500).json({ message: error.message });

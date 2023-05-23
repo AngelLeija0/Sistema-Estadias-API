@@ -13,9 +13,9 @@ router.get('/', async (req, res) => {
 });
 
 // GET - Obtener administrador por id
-router.get('/:id', async (req, res) => {
+router.get('/id/:id', async (req, res) => {
     try {
-        const administrador = await Administrador.findById(req.body.id);
+        const administrador = await Administrador.findById(req.params.id);
         res.json(administrador);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -31,8 +31,8 @@ router.get('/:data', async (req, res) => {
             const filter = {};
             filter[properties] = req.params.data;
             const administrador = await Administrador.findOne(filter);
-            if (administrador !== null) {
-                return res.json(administrador)
+            if (administrador != null) {
+                return res.json(administrador);
             }
         }
     } catch (error) {

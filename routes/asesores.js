@@ -14,9 +14,9 @@ router.get('/', async (req, res) => {
 });
 
 // GET - Obtener asesor por id
-router.get('/:id', async (req, res) => {
+router.get('/id/:id', async (req, res) => {
   try {
-    const asesor = await Asesor.findById(req.body.id);
+    const asesor = await Asesor.findById(req.params.id);
     res.json(asesor);
   } catch (error) {
     res.status(500).json({ message: error.message });

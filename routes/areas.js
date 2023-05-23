@@ -13,9 +13,9 @@ router.get('/', async (req, res) => {
 });
 
 // GET - Obtener area por id
-router.get('/:id', async (req, res) => {
+router.get('/id/:id', async (req, res) => {
     try {
-        const area = await Area.findById(req.body.id);
+        const area = await Area.findById(req.params.id);
         res.json(area);
     } catch (error) {
         res.status(500).json({ message: error.message });

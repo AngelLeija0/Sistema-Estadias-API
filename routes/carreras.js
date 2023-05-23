@@ -13,9 +13,9 @@ router.get('/', async (req, res) => {
 });
 
 // GET - Obtener carrera por id
-router.get('/:id', async (req, res) => {
+router.get('/id/:id', async (req, res) => {
   try {
-    const carrera = await Carrera.findById(req.body.id);
+    const carrera = await Carrera.findById(req.params.id);
     res.json(carrera);
   } catch (error) {
     res.status(500).json({ message: error.message });

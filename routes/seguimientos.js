@@ -14,9 +14,9 @@ router.get('/', async (req, res) => {
 });
 
 // GET - Obtener seguimiento por id
-router.get('/:id', async (req, res) => {
+router.get('/id/:id', async (req, res) => {
   try {
-    const seguimiento = await Seguimiento.findById(req.body.id);
+    const seguimiento = await Seguimiento.findById(req.params.id);
     res.json(seguimiento);
   } catch (error) {
     res.status(500).json({ message: error.message });

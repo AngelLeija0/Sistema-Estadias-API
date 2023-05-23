@@ -13,9 +13,9 @@ router.get('/', async (req, res) => {
 });
 
 // GET - Obtener estudiante por id
-router.get('/:id', async (req, res) => {
+router.get('/id/:id', async (req, res) => {
   try {
-    const estudiante = await Estudiante.findById(req.body.id);
+    const estudiante = await Estudiante.findById(req.params.id);
     res.json(estudiante);
   } catch (error) {
     res.status(500).json({ message: error.message });

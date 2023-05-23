@@ -13,9 +13,9 @@ router.get('/', async (req, res) => {
 });
 
 // GET - Obtener CPA por id
-router.get('/:id', async (req, res) => {
+router.get('/id/:id', async (req, res) => {
   try {
-    const cpa = await CPA.findById(req.body.id);
+    const cpa = await CPA.findById(req.params.id);
     res.json(cpa);
   } catch (error) {
     res.status(500).json({ message: error.message });
