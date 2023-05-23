@@ -6,7 +6,7 @@ const Administrador = require('../models/administrador');
 router.get('/', async (req, res) => {
     try {
         const administradores = await Administrador.find();
-        res.json(administradores);
+        res.json(Administrador.keys());
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
