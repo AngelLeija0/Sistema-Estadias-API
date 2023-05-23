@@ -44,8 +44,7 @@ router.patch('/:id', async (req, res) => {
 // DELETE - Eliminar una carrera por su ID
 router.delete('/:id', async (req, res) => {
   try {
-    const carrera = await Carrera.findById(req.params.id);
-    await carrera.remove();
+    await Carrera.findByIdAndDelete(req.params.id);
     res.json({ message: 'Carrera eliminada' });
   } catch (error) {
     res.status(404).json({ message: error.message });

@@ -40,8 +40,7 @@ router.patch('/:id', async (req, res) => {
 // DELETE - Eliminar un grupo por su ID
 router.delete('/:id', async (req, res) => {
   try {
-    const grupo = await Grupo.findById(req.params.id);
-    await grupo.remove();
+    await Grupo.findByIdAndDelete(req.params.id);
     res.json({ message: 'Grupo eliminado' });
   } catch (error) {
     res.status(404).json({ message: error.message });

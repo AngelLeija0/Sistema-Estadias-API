@@ -42,8 +42,7 @@ router.patch('/:id', async (req, res) => {
 // DELETE - Eliminar una Area por su ID
 router.delete('/:id', async (req, res) => {
     try {
-        const area = await Area.findById(req.params.id);
-        await area.remove();
+        await Area.findByIdAndDelete(req.params.id);
         res.json({ message: 'Area eliminada' });
     } catch (error) {
         res.status(404).json({ message: error.message });

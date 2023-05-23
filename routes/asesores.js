@@ -54,8 +54,7 @@ router.patch('/:id', async (req, res) => {
 // DELETE - Eliminar un asesor por su ID
 router.delete('/:id', async (req, res) => {
   try {
-    const asesor = await Asesor.findById(req.params.id);
-    await asesor.remove();
+    await Asesor.findByIdAndDelete(req.params.id);
     res.json({ message: 'Asesor eliminado' });
   } catch (error) {
     res.status(404).json({ message: error.message });

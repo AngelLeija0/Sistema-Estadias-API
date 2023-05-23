@@ -40,8 +40,7 @@ router.patch('/:id', async (req, res) => {
 // DELETE - Eliminar un turno por su ID
 router.delete('/:id', async (req, res) => {
   try {
-    const turno = await Turno.findById(req.params.id);
-    await turno.remove();
+    await Turno.findByIdAndDelete(req.params.id);
     res.json({ message: 'Turno eliminado' });
   } catch (error) {
     res.status(404).json({ message: error.message });

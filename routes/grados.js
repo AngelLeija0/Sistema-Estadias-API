@@ -40,8 +40,7 @@ router.patch('/:id', async (req, res) => {
 // DELETE - Eliminar un grado por su ID
 router.delete('/:id', async (req, res) => {
   try {
-    const grado = await Grado.findById(req.params.id);
-    await grado.remove();
+    await Grado.findByIdAndDelete(req.params.id);
     res.json({ message: 'Grado eliminado' });
   } catch (error) {
     res.status(404).json({ message: error.message });

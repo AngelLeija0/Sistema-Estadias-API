@@ -60,8 +60,7 @@ router.patch('/:id', async (req, res) => {
 // DELETE - Eliminar una CPA por su ID
 router.delete('/:id', async (req, res) => {
   try {
-    const cpa = await CPA.findById(req.params.id);
-    await cpa.remove();
+    await CPA.findByIdAndDelete(req.params.id);
     res.json({ message: 'CPA eliminada' });
   } catch (error) {
     res.status(404).json({ message: error.message });

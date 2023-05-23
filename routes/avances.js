@@ -62,8 +62,7 @@ router.patch('/:id', async (req, res) => {
 // DELETE - Eliminar un avance por su ID
 router.delete('/:id', async (req, res) => {
   try {
-    const avance = await Avance.findById(req.params.id);
-    await avance.remove();
+    await Avance.findByIdAndDelete(req.params.id);
     res.json({ message: 'Avance eliminado' });
   } catch (error) {
     res.status(404).json({ message: error.message });

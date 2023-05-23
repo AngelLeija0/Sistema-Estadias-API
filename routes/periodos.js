@@ -40,8 +40,7 @@ router.patch('/:id', async (req, res) => {
 // DELETE - Eliminar un periodo por su ID
 router.delete('/:id', async (req, res) => {
   try {
-    const periodo = await Periodo.findById(req.params.id);
-    await periodo.remove();
+    await Periodo.findByIdAndDelete(req.params.id);
     res.json({ message: 'Periodo eliminado' });
   } catch (error) {
     res.status(404).json({ message: error.message });
