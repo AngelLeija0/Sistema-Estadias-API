@@ -15,10 +15,28 @@ router.get('/', async (req, res) => {
 // GET - Obtener estudiante por id
 router.get('/:id', async (req, res) => {
   try {
-    const estudiante = await Estudiante.find(req.body.id);
+    const estudiante = await Estudiante.findById(req.body.id);
     res.json(estudiante);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// GET - Obtener estudiante por dato
+router.get('/:data', async (req, res) => {
+  try {
+      const schemaProperties = Object.keys(Estudiante.schema.obj);
+      
+      for (const properties of schemaProperties) {
+          const filter = {};
+          filter[properties] = req.params.data;
+          const estudiante = await Estudiante.findOne(filter);
+          if (estudiante !== null) {
+              return res.json(estudiante)
+          }
+      }
+  } catch (error) {
+      res.status(500).json({ message: error.message });
   }
 });
 

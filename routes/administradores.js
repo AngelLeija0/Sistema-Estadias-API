@@ -6,17 +6,35 @@ const Administrador = require('../models/administrador');
 router.get('/', async (req, res) => {
     try {
         const administradores = await Administrador.find();
-        res.json(Administrador.keys());
+        res.json(administradores);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
 
 // GET - Obtener administrador por id
+router.get('/:id', async (req, res) => {
+    try {
+        const administrador = await Administrador.findById(req.body.id);
+        res.json(administrador);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// GET - Obtener administrador por dato
 router.get('/:data', async (req, res) => {
     try {
-        const administrador = await Administrador.find(req.params.data);
-        res.json(administrador);
+        const schemaProperties = Object.keys(Administrador.schema.obj);
+        
+        for (const properties of schemaProperties) {
+            const filter = {};
+            filter[properties] = req.params.data;
+            const administrador = await Administrador.findOne(filter);
+            if (administrador !== null) {
+                return res.json(administrador)
+            }
+        }
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

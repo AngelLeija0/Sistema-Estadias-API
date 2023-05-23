@@ -15,10 +15,28 @@ router.get('/', async (req, res) => {
 // GET - Obtener grupo por id
 router.get('/:id', async (req, res) => {
   try {
-    const grupo = await Grupo.find(req.body.id);
+    const grupo = await Grupo.findById(req.body.id);
     res.json(grupo);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// GET - Obtener grupo por dato
+router.get('/:data', async (req, res) => {
+  try {
+      const schemaProperties = Object.keys(Grupo.schema.obj);
+      
+      for (const properties of schemaProperties) {
+          const filter = {};
+          filter[properties] = req.params.data;
+          const grupo = await Grupo.findOne(filter);
+          if (grupo !== null) {
+              return res.json(grupo)
+          }
+      }
+  } catch (error) {
+      res.status(500).json({ message: error.message });
   }
 });
 

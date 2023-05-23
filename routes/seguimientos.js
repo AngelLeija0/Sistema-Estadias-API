@@ -16,10 +16,28 @@ router.get('/', async (req, res) => {
 // GET - Obtener seguimiento por id
 router.get('/:id', async (req, res) => {
   try {
-    const seguimiento = await Seguimiento.find(req.body.id);
+    const seguimiento = await Seguimiento.findById(req.body.id);
     res.json(seguimiento);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// GET - Obtener seguimiento por dato
+router.get('/:data', async (req, res) => {
+  try {
+      const schemaProperties = Object.keys(Seguimiento.schema.obj);
+      
+      for (const properties of schemaProperties) {
+          const filter = {};
+          filter[properties] = req.params.data;
+          const seguimiento = await Seguimiento.findOne(filter);
+          if (seguimiento !== null) {
+              return res.json(seguimiento)
+          }
+      }
+  } catch (error) {
+      res.status(500).json({ message: error.message });
   }
 });
 

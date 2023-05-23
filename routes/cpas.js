@@ -15,10 +15,28 @@ router.get('/', async (req, res) => {
 // GET - Obtener CPA por id
 router.get('/:id', async (req, res) => {
   try {
-    const cpa = await CPA.find(req.body.id);
+    const cpa = await CPA.findById(req.body.id);
     res.json(cpa);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// GET - Obtener CPA por dato
+router.get('/:data', async (req, res) => {
+  try {
+      const schemaProperties = Object.keys(CPA.schema.obj);
+      
+      for (const properties of schemaProperties) {
+          const filter = {};
+          filter[properties] = req.params.data;
+          const cpa = await CPA.findOne(filter);
+          if (cpa !== null) {
+              return res.json(cpa)
+          }
+      }
+  } catch (error) {
+      res.status(500).json({ message: error.message });
   }
 });
 

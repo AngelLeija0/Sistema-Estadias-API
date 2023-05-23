@@ -15,10 +15,28 @@ router.get('/', async (req, res) => {
 // GET - Obtener turno por id
 router.get('/:id', async (req, res) => {
   try {
-    const turno = await Turno.find(req.body.id);
+    const turno = await Turno.findById(req.body.id);
     res.json(turno);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// GET - Obtener turno por dato
+router.get('/:data', async (req, res) => {
+  try {
+      const schemaProperties = Object.keys(Turno.schema.obj);
+      
+      for (const properties of schemaProperties) {
+          const filter = {};
+          filter[properties] = req.params.data;
+          const turno = await Turno.findOne(filter);
+          if (turno !== null) {
+              return res.json(turno)
+          }
+      }
+  } catch (error) {
+      res.status(500).json({ message: error.message });
   }
 });
 

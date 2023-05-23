@@ -15,10 +15,28 @@ router.get('/', async (req, res) => {
 // GET - Obtener avance por id
 router.get('/:id', async (req, res) => {
   try {
-    const avance = await Avance.find(req.body.id);
+    const avance = await Avance.findById(req.body.id);
     res.json(avance);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// GET - Obtener avance por dato
+router.get('/:data', async (req, res) => {
+  try {
+      const schemaProperties = Object.keys(Avance.schema.obj);
+      
+      for (const properties of schemaProperties) {
+          const filter = {};
+          filter[properties] = req.params.data;
+          const avance = await Avance.findOne(filter);
+          if (avance !== null) {
+              return res.json(avance)
+          }
+      }
+  } catch (error) {
+      res.status(500).json({ message: error.message });
   }
 });
 

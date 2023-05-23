@@ -15,10 +15,28 @@ router.get('/', async (req, res) => {
 // GET - Obtener grado por id
 router.get('/:id', async (req, res) => {
   try {
-    const grado = await Grado.find(req.body.id);
+    const grado = await Grado.findById(req.body.id);
     res.json(grado);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// GET - Obtener grado por dato
+router.get('/:data', async (req, res) => {
+  try {
+      const schemaProperties = Object.keys(Grado.schema.obj);
+      
+      for (const properties of schemaProperties) {
+          const filter = {};
+          filter[properties] = req.params.data;
+          const grado = await Grado.findOne(filter);
+          if (grado !== null) {
+              return res.json(grado)
+          }
+      }
+  } catch (error) {
+      res.status(500).json({ message: error.message });
   }
 });
 

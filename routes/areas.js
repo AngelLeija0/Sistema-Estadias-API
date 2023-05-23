@@ -15,12 +15,31 @@ router.get('/', async (req, res) => {
 // GET - Obtener area por id
 router.get('/:id', async (req, res) => {
     try {
-        const area = await Area.find(req.body.id);
+        const area = await Area.findById(req.body.id);
         res.json(area);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
+
+// GET - Obtener area por dato
+router.get('/:data', async (req, res) => {
+    try {
+        const schemaProperties = Object.keys(Area.schema.obj);
+        
+        for (const properties of schemaProperties) {
+            const filter = {};
+            filter[properties] = req.params.data;
+            const area = await Area.findOne(filter);
+            if (area !== null) {
+                return res.json(area)
+            }
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 
 // POST - Crear una nueva Area
 router.post('/', async (req, res) => {

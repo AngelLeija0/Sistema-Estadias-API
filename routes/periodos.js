@@ -15,10 +15,28 @@ router.get('/', async (req, res) => {
 // GET - Obtener periodo por id
 router.get('/:id', async (req, res) => {
   try {
-    const periodo = await Periodo.find(req.body.id);
+    const periodo = await Periodo.findById(req.body.id);
     res.json(periodo);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// GET - Obtener periodo por dato
+router.get('/:data', async (req, res) => {
+  try {
+      const schemaProperties = Object.keys(Periodo.schema.obj);
+      
+      for (const properties of schemaProperties) {
+          const filter = {};
+          filter[properties] = req.params.data;
+          const periodo = await Periodo.findOne(filter);
+          if (periodo !== null) {
+              return res.json(periodo)
+          }
+      }
+  } catch (error) {
+      res.status(500).json({ message: error.message });
   }
 });
 

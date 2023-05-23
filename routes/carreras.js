@@ -15,10 +15,28 @@ router.get('/', async (req, res) => {
 // GET - Obtener carrera por id
 router.get('/:id', async (req, res) => {
   try {
-    const carrera = await Carrera.find(req.body.id);
+    const carrera = await Carrera.findById(req.body.id);
     res.json(carrera);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// GET - Obtener carrera por dato
+router.get('/:data', async (req, res) => {
+  try {
+      const schemaProperties = Object.keys(Carrera.schema.obj);
+      
+      for (const properties of schemaProperties) {
+          const filter = {};
+          filter[properties] = req.params.data;
+          const carrera = await Carrera.findOne(filter);
+          if (carrera !== null) {
+              return res.json(carrera)
+          }
+      }
+  } catch (error) {
+      res.status(500).json({ message: error.message });
   }
 });
 
