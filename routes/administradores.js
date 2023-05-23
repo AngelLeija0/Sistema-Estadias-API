@@ -42,7 +42,7 @@ router.patch('/:id', async (req, res) => {
 });
 
 // DELETE - Eliminar un administrador por su ID
-router.delete('/', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const administrador = await Administrador.findById(req.params.id);
         await administrador.remove();
