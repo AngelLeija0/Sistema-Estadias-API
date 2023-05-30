@@ -5,7 +5,10 @@ const carreraSchema = new mongoose.Schema(
   {
     nombreCarrera: String,
     descripcionCarrera: String,
-    directorCarrera: String
+    directorCarrera: String,
+    areas: {
+      area: String
+    }
   },
   {
     collection: 'carreras'

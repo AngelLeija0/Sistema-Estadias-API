@@ -39,10 +39,6 @@ app.use('/avances', avancesRouter);
 const carrerasRouter = require('./routes/carreras');
 app.use('/carreras', carrerasRouter);
 
-// Areas
-const areasRouter = require('./routes/areas');
-app.use('/areas', areasRouter);
-
 // CPA (Carta Presentacion Alumno)
 const cpaRouter = require('./routes/cpas');
 app.use('/cpa', cpaRouter);
