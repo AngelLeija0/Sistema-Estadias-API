@@ -13,7 +13,8 @@ const asesorSchema = new mongoose.Schema(
     emailAsesor: String,
     telfAsesor: String,
     usernameAsesor: String,
-    passwordAsesor: String
+    passwordAsesor: String,
+    fechaRegistro: String
   },
   {
     collection: 'asesores'

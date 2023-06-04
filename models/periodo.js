@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 // Esquema de la colección Periodo
 const periodoSchema = new mongoose.Schema(
   {
-    periodo: String
+    periodo: String,
+    fechaRegistro: String
   },
   { 
     collection: 'periodos' 

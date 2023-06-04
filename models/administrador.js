@@ -5,7 +5,8 @@ const administradorSchema = new mongoose.Schema(
   {
     nombreAdmin: String,
     emailAdmin: String,
-    passwordAdmin: String
+    passwordAdmin: String,
+    fechaRegistro: String
   },
   {
     collection: 'administradores'
