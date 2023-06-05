@@ -22,19 +22,13 @@ router.get('/id/:id', async (req, res) => {
   }
 });
 
-// GET - Obtener seguimiento por dato
-router.get('/:data', async (req, res) => {
+// GET - Obtener seguimietos de alumnos asesorados
+router.get('/asesor/:id', async (req, res) => {
   try {
-    const schemaProperties = Object.keys(Seguimiento.schema.obj);
-
-    for (const properties of schemaProperties) {
-      const filter = {};
-      filter[properties] = req.params.data;
-      const seguimiento = await Seguimiento.findOne(filter);
-      if (seguimiento !== null) {
-        return res.json(seguimiento)
-      }
-    }
+    const seguimiento = await Seguimiento.findById({
+      idAsesor: ObjectId(req.params.id)
+    });
+    res.json(seguimiento);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -11,7 +11,7 @@ const seguimientoSchema = new mongoose.Schema(
                 fecha: Date
             }
         },
-        nss: {
+        nss: { // Numero seguro
             archivo: String,
             estado: {
                 nombre: String,
@@ -19,7 +19,7 @@ const seguimientoSchema = new mongoose.Schema(
                 fecha: Date
             }
         },
-        cpa: { // Carta de presentacion
+        cpa: { // Carta de presentacion alumno
             archivo: String,
             estado: {
                 nombre: String,
