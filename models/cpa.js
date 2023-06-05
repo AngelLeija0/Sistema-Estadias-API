@@ -13,6 +13,11 @@ const cpaSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'periodos'
     },
+    estado: {
+      name: String,
+      motivo: String,
+      fecha: Date
+    },
     telfonoCelular: String,
     telfonoCasa: String,
     nss: String,
@@ -22,8 +27,8 @@ const cpaSchema = new mongoose.Schema(
     puestoEmpresario: String,
     año: String,
   },
-  { 
-    collection: 'cpas' 
+  {
+    collection: 'cpas'
   }
 );
 

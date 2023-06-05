@@ -47,9 +47,13 @@ app.use('/estudiantes', estudiantesRouter);
 const periodosRouter = require('./routes/periodos');
 app.use('/periodos', periodosRouter);
 
-// Seguimientos
-const seguimientosRouter = require('./routes/seguimientos');
+// Seguimientos academicos
+const seguimientosRouter = require('./routes/seguimientosAcademicos');
 app.use('/seguimientos', seguimientosRouter);
+
+// Documentos (Segumientos administrativos)
+const seguimientosRouter = require('./routes/seguimientosAdministrativos');
+app.use('/documentos', seguimientosRouter);
 
 app.listen(3000, () => {
   console.log('Server started on port 3000');

@@ -56,6 +56,11 @@ router.post('/', async (req, res) => {
         proyecto: req.body.anteproyecto.proyecto,
         objetivo: req.body.anteproyecto.objetivo,
         descripcion: req.body.anteproyecto.descripcion,
+        estado: {
+          name: req.body.anteproyecto.estado.name,
+          motivo: req.body.anteproyecto.estado.motivo,
+          fecha: req.body.anteproyecto.estado.fecha
+        },
       }
     }
     if (req.body.avance) {
@@ -88,6 +93,9 @@ router.patch('/:id', async (req, res) => {
     seguimiento.anteproyecto.proyecto = req.body.anteproyecto.proyecto || seguimiento.anteproyecto.proyecto;
     seguimiento.anteproyecto.objetivo = req.body.anteproyecto.objetivo || seguimiento.anteproyecto.objetivo;
     seguimiento.anteproyecto.descripcion = req.body.anteproyecto.descripcion || seguimiento.anteproyecto.descripcion;
+    seguimiento.anteproyecto.estado.name = req.body.anteproyecto.estado.name || seguimiento.anteproyecto.estado.name;
+    seguimiento.anteproyecto.estado.motivo = req.body.anteproyecto.estado.motivo || seguimiento.anteproyecto.estado.motivo;
+    seguimiento.anteproyecto.estado.fecha = req.body.anteproyecto.estado.fecha || seguimiento.anteproyecto.estado.fecha;
     //Avance
     seguimiento.avance.idCPA = req.body.seguimiento.idCPA || seguimiento.avance.idCPA;
     seguimiento.avance.etapa1.nombre = req.body.avance.etapa1.nombre || seguimiento.avance.etapa1.nombre;

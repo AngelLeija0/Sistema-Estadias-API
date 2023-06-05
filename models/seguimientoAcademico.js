@@ -17,6 +17,11 @@ const seguimientoSchema = new mongoose.Schema(
       proyecto: String,
       objetivo: String,
       descripcion: String,
+      estado: {
+        name: String,
+        motivo: String,
+        fecha: Date
+      },
     },
     avance: {
       idCPA: {
