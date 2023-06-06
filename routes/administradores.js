@@ -22,19 +22,12 @@ router.get('/id/:id', async (req, res) => {
     }
 });
 
-// GET - Obtener administrador por dato
-router.get('/:data', async (req, res) => {
+// GET - Obtener administrador por id y por dato
+router.get('/id/:id/:filtro', async (req, res) => {
     try {
-        const schemaProperties = Object.keys(Administrador.schema.obj);
-        
-        for (const properties of schemaProperties) {
-            const filter = {};
-            filter[properties] = req.params.data;
-            const administrador = await Administrador.findOne(filter);
-            if (administrador != null) {
-                return res.json(administrador);
-            }
-        }
+        const administrador = await Administrador.findById(req.params.id);
+        administrador.find(req.params.filtro);
+        res.json(administrador);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

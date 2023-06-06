@@ -34,6 +34,19 @@ router.get('/asesor/:id', async (req, res) => {
   }
 });
 
+// GET - Obtener seguimietos de alumnos asesorados
+router.get('/asesor/:id/:filtro', async (req, res) => {
+  try {
+    const seguimiento = await Seguimiento.find({
+      idAsesor: ObjectId(req.params.id)
+    });
+    seguimiento.find(req.params.filtro);
+    res.json(seguimiento);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // POST - Crear un nuevo seguimiento
 router.post('/', async (req, res) => {
   try {
