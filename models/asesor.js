@@ -3,17 +3,19 @@ const mongoose = require('mongoose');
 // Esquema de la colección Asesores
 const asesorSchema = new mongoose.Schema(
   {
-    idCarrera: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'carreras'
+    datosPersonales: {
+      nombres: {
+        nombre: String,
+        apPaterno: String,
+        apMaterno: String,
+      },
+      privado: {
+        email: String,
+        telfono: String,
+        username: String,
+        password: String,
+      }
     },
-    nombreAsesor: String,
-    apPaternoAsesor: String,
-    apMaternoAsesor: String,
-    emailAsesor: String,
-    telfAsesor: String,
-    usernameAsesor: String,
-    passwordAsesor: String,
     fechaRegistro: String
   },
   {

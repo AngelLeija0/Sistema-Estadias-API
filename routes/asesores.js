@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Asesor = require('../models/asesor');
-const asesor = require('../models/asesor');
 
 // GET - Obtener todos los asesores
 router.get('/', async (req, res) => {
