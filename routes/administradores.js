@@ -40,9 +40,20 @@ router.get('/id/:id/:filtro', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const administrador = new Administrador({
-            nombreAdmin: req.body.nombreAdmin,
-            emailAdmin: req.body.emailAdmin,
-            passwordAdmin: req.body.passwordAdmin
+            datosPersonales: {
+                nombres: {
+                    nombre: req.body.datosPersonales.nombres.nombre,
+                    apPaterno: req.body.datosPersonales.nombres.apPaterno,
+                    apMaterno: req.body.datosPersonales.nombres.apMaterno
+                },
+                privado: {
+                    email: req.body.datosPrivados.privado.email,
+                    telefono: req.body.datosPrivados.privado.telefono,
+                    username: req.body.datosPrivados.privado.username,
+                    password: req.body.datosPrivados.privado.password
+                },
+            },
+            fechaRegistro: req.body.fechaRegistro
         });
         const newAdministrador = await administrador.save();
         res.status(201).json(newAdministrador);
@@ -55,9 +66,13 @@ router.post('/', async (req, res) => {
 router.patch('/:id', async (req, res) => {
     try {
         const administrador = await Administrador.findById(req.params.id);
-        administrador.nombreAdmin = req.body.nombreAdmin || administrador.nombreAdmin;
-        administrador.emailAdmin = req.body.emailAdmin || administrador.emailAdmin;
-        administrador.passwordAdmin = req.body.passwordAdmin || administrador.passwordAdmin;
+        administrador.datosPersonales.nombres.nombre = req.body.datosPersonales.nombres.nombre || administrador.datosPersonales.nombres.nombre;
+        administrador.datosPersonales.nombres.nombre = req.body.datosPersonales.nombres.nombre || administrador.datosPersonales.nombres.apPaterno;
+        administrador.datosPersonales.nombres.nombre = req.body.datosPersonales.nombres.nombre || administrador.datosPersonales.nombres.apMaterno;
+        administrador.datosPersonales.privado.email = req.body.datosPersonales.privado.email || administrador.datosPersonales.privado.email;
+        administrador.datosPersonales.privado.telefono = req.body.datosPersonales.privado.telefono || administrador.datosPersonales.privado.telefono;
+        administrador.datosPersonales.privado.username = req.body.datosPersonales.privado.username || administrador.datosPersonales.privado.username;
+        administrador.datosPersonales.privado.password = req.body.datosPersonales.privado.password || administrador.datosPersonales.privado.password;
         const updatedAdministrador = await administrador.save();
         res.json(updatedAdministrador);
     } catch (error) {

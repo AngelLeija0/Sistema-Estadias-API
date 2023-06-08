@@ -1,9 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-// Esquema de la colección Estudiantes
+// Esquema de la colección Alumnos
 const alumnoSchema = new mongoose.Schema(
   {
-    /* Datos personales del alumno */
     datosPersonales: {
       nombres: {
         nombre: String,
@@ -16,159 +15,19 @@ const alumnoSchema = new mongoose.Schema(
         password: String
       }
     },
-    /* Datos academicos del alumno */
     datosAcademicos: {
-      nivelAcademico: String,
-      carrera: String,
-      area: String,
+      idCarrera: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'carreras'
+      },
+      grado: String,
+      grupo: String
     },
-    /* Datos del proceso de estadias del alumno */
-    estadias: {
-      cartaPresentacion: {
-        estado: {
-          nombre: String, // En revision, Aceptado, Rechazado
-          motivo: String,
-          fecha: Date,
-        },
-        datosAlumno: {
-          datosAlumno: datosPersonales,
-          telfonoCelular: String,
-          telfonoCasa: String,
-          nss: String,
-          curp: String,
-        },
-        datosAcademicos: {
-          datosAcademicosAlumno: datosAcademicos,
-          perido: String,
-          año: String
-        },
-        datosEmpresa: {
-          nombreEmpresa: String,
-          nombreEmpresario: String,
-          puestoEmpresario: String
-        },
-        fechaRegistro: Date // Fecha registro de Carta presentacion
-      },
-      anteproyecto: {
-        datosEmpresa: {
-          emailEmpresario: String,
-          telfEmpresario: String,
-        },
-        datosProyecto: {
-          nombre: String,
-          objetivo: String,
-          descripcion: String
-        },
-        estado: {
-          nombre: String,
-          motivo: String,
-          fecha: Date
-        },
-        fechaRegistro: Date // Fecha registro de Anteproyecto
-      },
-      avance: {
-        etapa1: {
-          nombre: String,
-          fecha: Date,
-        },
-        etapa2: {
-          nombre: String,
-          fecha: Date,
-        },
-        etapa3: {
-          nombre: String,
-          fecha: Date,
-        },
-        etapa4: {
-          nombre: String,
-          fecha: Date,
-        },
-        etapa5: {
-          nombre: String,
-          fecha: Date,
-        },
-        progreso: Number
-      },
-      documentos: {
-        curriculum: {
-          archivo: String,
-          estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
-          }
-        },
-        nss: { // Numero seguro
-          archivo: String,
-          estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
-          }
-        },
-        cpa: { // Carta de presentacion alumno
-          archivo: String,
-          estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
-          }
-        },
-        caa: { // Carta Aceptacion
-          archivo: String,
-          estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
-          }
-        },
-        reporte: { // Reporte de proyecto
-          archivo: String,
-          estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
-          }
-        },
-        rubrica: { // Rubrica de evaluacion
-          archivo: String,
-          estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
-          }
-        },
-        dictamen: {
-          archivo: String,
-          estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
-          }
-        },
-        protesta: { // Protesta de Ley
-          archivo: String,
-          estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
-          }
-        },
-        cta: { // Carta terminacion
-          archivo: String,
-          estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
-          }
-        },
-      }
-    },
-    fechaRegistro: Date // Fecha registro de Alumnos
+    fechaRegistro: Date
   },
   {
-    collection: 'alumno'
+    collection: 'alumnos'
   }
-);
+)
 
-module.exports = mongoose.model('Alumno', alumnoSchema);
+module.exports = mongoose.model('Alumno', alumnoSchema)

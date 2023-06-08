@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 // Esquema de la colección Asesores
 const asesorSchema = new mongoose.Schema(
@@ -7,13 +7,13 @@ const asesorSchema = new mongoose.Schema(
       nombres: {
         nombre: String,
         apPaterno: String,
-        apMaterno: String,
+        apMaterno: String
       },
       privado: {
         email: String,
         telfono: String,
         username: String,
-        password: String,
+        password: String
       }
     },
     fechaRegistro: String
@@ -21,6 +21,6 @@ const asesorSchema = new mongoose.Schema(
   {
     collection: 'asesores'
   }
-);
+)
 
-module.exports = mongoose.model('Asesor', asesorSchema);
+module.exports = mongoose.model('Asesor', asesorSchema)

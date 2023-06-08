@@ -1,18 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const Alumno = require('../models/alumno');
+const Estadia = require('../models/estadia');
 
-// GET - Obtener todos los alumnos
+// GET - Obtener todos las estadias
 router.get('/', async (req, res) => {
   try {
-    const alumnos = await Alumno.find();
-    res.json(alumnos);
+    const estadias = await Estadia.find();
+    res.json(estadias);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// GET - Obtener alumno por id
+// GET - Obtener estadias por id
 router.get('/id/:id', async (req, res) => {
   try {
     const alumno = await Alumno.findById(req.params.id);
