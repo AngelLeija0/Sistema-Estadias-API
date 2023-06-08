@@ -1,24 +1,13 @@
 [
     {
-        "idAsesor": "647f5f24c5e08e77ac75268f",
-        "idEstudiante": "647f5fa7c5e08e77ac752691",
-        "anteproyecto": {
-
+        "nombre": "Tecnologias de la Informacion",
+        "descripcion": "",
+        "director": "",
+        "area": {
+            "nombre": ["Desarrollo de Software Multiplataforma", "Entornos y Negocios Digitales"],
+            "turno": ["Matutino", "Vespertino"],
+            "nivel": ["Tecnico Superior Universitario (TSU)", "Ingenieria", "Posgrado"]
         },
-        "avance": {
-
-        },
-        "fechaRegistro": "06-06-2023:11:59:00"
-    },
-    {
-        "idAsesor": "647f5f24c5e08e77ac75268f",
-        "idEstudiante": "647f5fa7c5e08e77ac752692",
-        "anteproyecto": {
-
-        },
-        "avance": {
-
-        },
-        "fechaRegistro": "06-06-2023:11:59:00"
+        "fechaRegistro": ""
     }
 ]

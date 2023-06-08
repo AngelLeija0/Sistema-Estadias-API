@@ -11,7 +11,7 @@ const carreraSchema = new mongoose.Schema(
       turno: Array, // Matutino, vespertino
       nivel: Array // TSU, Ingenieria, Posgadro
     },
-    fechaRegistro: String
+    fechaRegistro: Date
   },
   {
     collection: 'carreras'

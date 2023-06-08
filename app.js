@@ -35,25 +35,13 @@ app.use('/asesores', asesoresRouter);
 const carrerasRouter = require('./routes/carreras');
 app.use('/carreras', carrerasRouter);
 
-// CPA (Carta Presentacion Alumno)
-const cpaRouter = require('./routes/cpas');
-app.use('/cpa', cpaRouter);
+// Alumnos
+const alumnosRouter = require('./routes/alumnos');
+app.use('/alumnos', alumnosRouter);
 
-// Estudiantes
-const estudiantesRouter = require('./routes/estudiantes');
-app.use('/estudiantes', estudiantesRouter);
-
-// Periodos
-const periodosRouter = require('./routes/periodos');
-app.use('/periodos', periodosRouter);
-
-// Seguimientos academicos
-const seguimientosRouter = require('./routes/seguimientosAcademicos');
-app.use('/seguimientos', seguimientosRouter);
-
-// Documentos (Segumientos administrativos)
-const documentosRouter = require('./routes/seguimientosAdministrativos');
-app.use('/documentos', documentosRouter);
+// Estadias
+const estadiasRouter = require('./routes/estadias');
+app.use('/estadias', estadiasRouter);
 
 app.listen(3000, () => {
   console.log('Server started on port 3000');

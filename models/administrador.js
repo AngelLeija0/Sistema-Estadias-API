@@ -16,7 +16,7 @@ const administradorSchema = new mongoose.Schema(
         password: String
       }
     },
-    fechaRegistro: String
+    fechaRegistro: Date
   },
   {
     collection: 'administradores'

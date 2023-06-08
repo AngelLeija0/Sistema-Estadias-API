@@ -16,7 +16,7 @@ const asesorSchema = new mongoose.Schema(
         password: String
       }
     },
-    fechaRegistro: String
+    fechaRegistro: Date
   },
   {
     collection: 'asesores'

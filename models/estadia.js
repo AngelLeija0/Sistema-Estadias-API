@@ -165,8 +165,7 @@ const estadiaSchema = new mongoose.Schema(
           }
         }
       }
-    },
-    fechaRegistro: Date // Fecha registro de Alumnos
+    }
   },
   {
     collection: 'estadias'
