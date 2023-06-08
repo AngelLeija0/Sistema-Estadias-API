@@ -33,10 +33,10 @@ router.post('/', async (req, res) => {
           apMaterno: req.body.datosPersonales.nombres.apMaterno
         },
         privado: {
-          email: req.body.datosPrivados.privado.email,
-          telefono: req.body.datosPrivados.privado.telefono,
-          username: req.body.datosPrivados.privado.username,
-          password: req.body.datosPrivados.privado.password
+          email: req.body.datosPersonales.privado.email,
+          telefono: req.body.datosPersonales.privado.telefono,
+          username: req.body.datosPersonales.privado.username,
+          password: req.body.datosPersonales.privado.password
         },
       },
       datosAcademicos: {
@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
         grado: req.body.datosAcademicos.grado,
         grupo: req.body.datosAcademicos.grupo
       },
-      fechaRegistro: req.body.fechaRegistro
+      fechaRegistro: new Date(req.body.fechaRegistro)
     });
     const newalumno = await Alumno.save();
     res.status(201).json(newalumno);

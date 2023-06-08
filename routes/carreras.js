@@ -30,11 +30,11 @@ router.post('/', async (req, res) => {
         descripcion: req.body.descripcion,
         director: req.body.director,
         area: {
-          nombre: req.body.area.nivel,
-          turno: req.body.area.nivel,
+          nombre: req.body.area.nombre,
+          turno: req.body.area.turno,
           nivel: req.body.area.nivel 
         },
-        fechaRegistro: req.body.fechaRegistro
+        fechaRegistro: new Date(req.body.fechaRegistro)
     });
     const newCarrera = await carrera.save();
     res.status(201).json(newCarrera);

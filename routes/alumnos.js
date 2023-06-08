@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
+
 const express = require('express');
 const router = express.Router();
 const Alumno = require('../models/alumno');
@@ -25,7 +28,7 @@ router.get('/id/:id', async (req, res) => {
 // POST - Crear un nuevo alumno
 router.post('/', async (req, res) => {
   try {
-    const alumno = new alumno({
+    const alumno = new Alumno({
       datosPersonales: {
         nombres: {
           nombre: req.body.datosPersonales.nombres.nombre,
@@ -33,23 +36,23 @@ router.post('/', async (req, res) => {
           apMaterno: req.body.datosPersonales.nombres.apMaterno
         },
         privado: {
-          email: req.body.datosPrivados.privado.email,
-          telefono: req.body.datosPrivados.privado.telefono,
-          username: req.body.datosPrivados.privado.username,
-          password: req.body.datosPrivados.privado.password
+          matricula: req.body.datosPersonales.privado.matricula,
+          email: req.body.datosPersonales.privado.email,
+          password: req.body.datosPersonales.privado.password
         },
       },
       datosAcademicos: {
-        idCarrera: req.body.datosAcademicos.idCarrera,
+        idCarrera: new ObjectId(req.body.datosAcademicos.idCarrera),
         grado: req.body.datosAcademicos.grado,
         grupo: req.body.datosAcademicos.grupo
       },
-      fechaRegistro: req.body.fechaRegistro
+      fechaRegistro: new Date(req.body.fechaRegistro)
     });
-    const newalumno = await Alumno.save();
+    const newalumno = await alumno.save();
     res.status(201).json(newalumno);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.json(req.body)
+    //res.status(400).json({ message: error.message });
   }
 });
 
@@ -61,8 +64,7 @@ router.patch('/:id', async (req, res) => {
     alumno.datosPersonales.nombres.nombre = req.body.datosPersonales.nombres.nombre || alumno.datosPersonales.nombres.apPaterno;
     alumno.datosPersonales.nombres.nombre = req.body.datosPersonales.nombres.nombre || alumno.datosPersonales.nombres.apMaterno;
     alumno.datosPersonales.privado.email = req.body.datosPersonales.privado.email || alumno.datosPersonales.privado.email;
-    alumno.datosPersonales.privado.telefono = req.body.datosPersonales.privado.telefono || alumno.datosPersonales.privado.telefono;
-    alumno.datosPersonales.privado.username = req.body.datosPersonales.privado.username || alumno.datosPersonales.privado.username;
+    alumno.datosPersonales.privado.matricula = req.body.datosPersonales.privado.matricula || alumno.datosPersonales.privado.matricula;
     alumno.datosPersonales.privado.password = req.body.datosPersonales.privado.password || alumno.datosPersonales.privado.password;
     alumno.datosAcademicos.idCarrera = req.body.datosAcademicos.idCarrera || alumno.datosAcademicos.idCarrera;
     alumno.datosAcademicos.grado = req.body.datosAcademicos.grado || alumno.datosAcademicos.grado;

@@ -1,0 +1,23 @@
+POST http://localhost:3000/alumnos
+Content-Type: application/json
+
+{
+    "datosPersonales": {
+        "nombres": {
+            "nombre": "Esdras Jehiel",
+            "apPaterno": "Ibarra",
+            "apMaterno": "Cruz"
+        },
+        "privado": {
+            "matricula": "1234567890",
+            "email": "esdras.jehiel@uttn.mx",
+            "password": "12345"
+        }
+    },
+    "datosAcademicos": {
+        "idCarrera": "648201802f7395c52fadaefd",
+        "grado": "5",
+        "grupo": "A"
+    },
+    "fechaRegistro": "06-08-2023"
+}
