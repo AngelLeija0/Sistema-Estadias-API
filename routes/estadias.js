@@ -66,6 +66,7 @@ router.post('/:ruta', async (req, res) => {
         }
       }
     }
+
     if (ruta == "anteproyecto" && req.body.anteproyecto) {
       objEstadia.anteproyecto = {
         datosEmpresa: {
@@ -85,6 +86,7 @@ router.post('/:ruta', async (req, res) => {
         fechaRegistro: req.body.anteproyecto.fechaRegistro
       }
     }
+
     if (ruta == "avance" && req.body.avance) {
       objEstadia.avance = {
         progreso: req.body.avance.progreso
@@ -125,6 +127,7 @@ router.post('/:ruta', async (req, res) => {
         }
       }
     }
+    
     if (ruta == "documentos" && req.body.documentos) {
       objEstadia.documentos = {};
       if (req.body.documentos.curriculum) {
