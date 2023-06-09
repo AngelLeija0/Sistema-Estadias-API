@@ -1,9 +1,13 @@
 const mongoose = require('mongoose')
 
-// Esquema de la colección Alumnos
+// Esquema de la colección Estadias
 const estadiaSchema = new mongoose.Schema(
   {
     estadias: {
+      idAsesor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'asesores'
+      },
       idAlumno: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'alumnos'
@@ -62,7 +66,7 @@ const estadiaSchema = new mongoose.Schema(
           descripcion: String
         },
         estado: {
-          nombre: String,
+          nombre: String, // En revision, Aceptada, Rechazada
           motivo: String,
           fecha: Date
         },
@@ -70,23 +74,28 @@ const estadiaSchema = new mongoose.Schema(
       },
       avance: {
         etapa1: {
-          nombre: String,
+          nombre: String, // En revision, Aceptada, Rechazada
+          motivo: String,
           fecha: Date
         },
         etapa2: {
           nombre: String,
+          motivo: String,
           fecha: Date
         },
         etapa3: {
           nombre: String,
+          motivo: String,
           fecha: Date
         },
         etapa4: {
           nombre: String,
+          motivo: String,
           fecha: Date
         },
         etapa5: {
           nombre: String,
+          motivo: String,
           fecha: Date
         },
         progreso: Number
