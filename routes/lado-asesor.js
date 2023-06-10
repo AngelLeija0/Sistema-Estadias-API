@@ -107,7 +107,7 @@ router.patch('/alumno/avance/', async (req, res) => {
         estadia.avance[etapa].motivo = req.body[etapa].motivo || estadia.avance[etapa].motivo;
         estadia.avance[etapa].fecha = new Date(req.body[etapa].fecha) || estadia.avance[etapa].fecha;
         const updatedEstadia = await estadia.save();
-        res.json(estadia);
+        res.json(updatedEstadia);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }

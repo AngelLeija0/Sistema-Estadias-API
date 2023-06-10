@@ -23,6 +23,8 @@ app.use(function(req, res, next) {
   next();
 });
 
+/* ----- Rutas back-end ----- */
+
 // Administrador
 const administradoresRouter = require('./routes/administradores');
 app.use('/administradores', administradoresRouter);
@@ -43,9 +45,21 @@ app.use('/alumnos', alumnosRouter);
 const estadiasRouter = require('./routes/estadias');
 app.use('/estadias', estadiasRouter);
 
+
+/* ----- Rutas front-end ----- */
+
 // Lado del asesor
 const ladoAsesorRouter = require('./routes/lado-asesor');
 app.use('/asesor', ladoAsesorRouter);
+
+// Lado alumno
+const alumnoRouter = require('./routes/lado-alumno');
+app.use('/alumno', alumnoRouter);
+
+// Lado administrador
+const adminRouter = require('./routes/lado-admin');
+app.use('/admin', adminRouter);
+
 
 app.listen(3000, () => {
   console.log('Server started on port 3000');
