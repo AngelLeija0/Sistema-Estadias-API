@@ -51,8 +51,7 @@ router.post('/', async (req, res) => {
     const newalumno = await alumno.save();
     res.status(201).json(newalumno);
   } catch (error) {
-    res.json(req.body)
-    //res.status(400).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
