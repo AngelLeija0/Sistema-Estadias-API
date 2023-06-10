@@ -13,164 +13,210 @@ const estadiaSchema = new mongoose.Schema(
         ref: 'alumnos'
       },
       cartaPresentacion: {
+        type: Object,
+        default: null,
+        required: false
+      },
+      anteproyecto: {
+        type: Object,
+        default: null,
+        required: false
+      },
+      documentos: {
+        type: Object,
+        default: null,
+        required: false
+      }
+    }
+  },
+  {
+    collection: 'estadias'
+  }
+)
+
+module.exports = mongoose.model('Estadia', estadiaSchema)
+
+
+/*
+
+const mongoose = require('mongoose')
+
+// Esquema de la colección Estadias
+const estadiaSchema = new mongoose.Schema(
+  {
+    estadias: {
+      idAsesor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'asesores'
+      },
+      idAlumno: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'alumnos'
+      },
+      cartaPresentacion: {
         estado: {
-          nombre: String, // En revision, Aceptado, Rechazado
-          motivo: String,
-          fecha: Date
+          nombre: { type: String, default: null }, // En revision, Aceptado, Rechazado
+          motivo: { type: String, default: null },
+          fecha: { type: Date, default: null }
         },
         datosAlumno: {
           datosAlumno: {
             nombres: {
-              nombre: String,
-              apPaterno: String,
-              apMaterno: String
+              nombre: { type: String, default: null },
+              apPaterno: { type: String, default: null },
+              apMaterno: { type: String, default: null }
             },
             privado: {
-              matricula: String,
-              email: String,
-              password: String
+              matricula: { type: String, default: null },
+              email: { type: String, default: null },
+              password: { type: String, default: null }
             }
           },
-          telfonoCelular: String,
-          telfonoCasa: String,
-          nss: String,
-          curp: String
+          telfonoCelular: { type: String, default: null },
+          telfonoCasa: { type: String, default: null },
+          nss: { type: String, default: null },
+          curp: { type: String, default: null }
         },
         datosAcademicos: {
           datosAcademicosAlumno: {
             idCarrera: {
               type: mongoose.Schema.Types.ObjectId,
-              ref: 'carreras'
+              ref: 'carreras',
+              default: null
             },
-            grado: String,
-            grupo: String
+            grado: { type: String, default: null },
+            grupo: { type: String, default: null }
           },
-          perido: String,
-          año: String
+          perido: { type: String, default: null },
+          año: { type: String, default: null }
         },
         datosEmpresa: {
-          nombreEmpresa: String,
-          nombreEmpresario: String,
-          puestoEmpresario: String
+          nombreEmpresa: { type: String, default: null },
+          nombreEmpresario: { type: String, default: null },
+          puestoEmpresario: { type: String, default: null }
         },
-        fechaRegistro: Date // Fecha registro de Carta presentacion
+        fechaRegistro: { type: Date, default: null } // Fecha registro de Carta presentacion
       },
       anteproyecto: {
-        datosEmpresa: {
-          emailEmpresario: String,
-          telfEmpresario: String
+        type: {
+          datosEmpresa: {
+            nombreEmpresario: { type: String, default: null },
+            emailEmpresario: { type: String, default: null },
+            telfEmpresario: { type: String, default: null }
+          },
+          datosProyecto: {
+            nombre: { type: String, default: null },
+            objetivo: { type: String, default: null },
+            descripcion: { type: String, default: null }
+          },
+          estado: {
+            nombre: { type: String, default: null }, // En revision, Aceptada, Rechazada
+            motivo: { type: String, default: null },
+            fecha: { type: Date, default: null }
+          },
+          fechaRegistro: { type: Date, default: null } // Fecha registro de Anteproyecto
         },
-        datosProyecto: {
-          nombre: String,
-          objetivo: String,
-          descripcion: String
-        },
-        estado: {
-          nombre: String, // En revision, Aceptada, Rechazada
-          motivo: String,
-          fecha: Date
-        },
-        fechaRegistro: Date // Fecha registro de Anteproyecto
+        default: null
       },
       avance: {
-        etapa1: {
-          nombre: String, // En revision, Aceptada, Rechazada
-          motivo: String,
-          fecha: Date
+        etapa1: { // Anteproyecto
+          nombre: { type: String, default: null }, // En revision, Aceptada, Rechazada
+          motivo: { type: String, default: null },
+          fecha: { type: Date, default: null }
         },
-        etapa2: {
-          nombre: String,
-          motivo: String,
-          fecha: Date
+        etapa2: { // 25%
+          nombre: { type: String, default: null },
+          motivo: { type: String, default: null },
+          fecha: { type: Date, default: null }
         },
-        etapa3: {
-          nombre: String,
-          motivo: String,
-          fecha: Date
+        etapa3: { // 50%
+          nombre: { type: String, default: null },
+          motivo: { type: String, default: null },
+          fecha: { type: Date, default: null }
         },
-        etapa4: {
-          nombre: String,
-          motivo: String,
-          fecha: Date
+        etapa4: { // 75%
+          nombre: { type: String, default: null },
+          motivo: { type: String, default: null },
+          fecha: { type: Date, default: null }
         },
-        etapa5: {
-          nombre: String,
-          motivo: String,
-          fecha: Date
+        etapa5: { // 100%
+          nombre: { type: String, default: null },
+          motivo: { type: String, default: null },
+          fecha: { type: Date, default: null }
         },
-        progreso: Number
+        progreso: { type: Number, default: null }
       },
       documentos: {
         curriculum: {
-          archivo: String,
+          archivo: { type: String, default: null },
           estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
+            nombre: { type: String, default: null },
+            motivo: { type: String, default: null },
+            fecha: { type: Date, default: null }
           }
         },
         nss: {  // Numero seguro
-          archivo: String,
+          archivo: { type: String, default: null },
           estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
+            nombre: { type: String, default: null },
+            motivo: { type: String, default: null },
+            fecha: { type: Date, default: null }
           }
         },
         cpa: {  // Carta de presentacion alumno
-          archivo: String,
+          archivo: { type: String, default: null },
           estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
+            nombre: { type: String, default: null },
+            motivo: { type: String, default: null },
+            fecha: { type: Date, default: null }
           }
         },
         caa: {  // Carta Aceptacion
-          archivo: String,
+          archivo: { type: String, default: null },
           estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
+            nombre: { type: String, default: null },
+            motivo: { type: String, default: null },
+            fecha: { type: Date, default: null }
           }
         },
         reporte: {  // Reporte de proyecto
-          archivo: String,
+          archivo: { type: String, default: null },
           estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
+            nombre: { type: String, default: null },
+            motivo: { type: String, default: null },
+            fecha: { type: Date, default: null }
           }
         },
         rubrica: {  // Rubrica de evaluacion
-          archivo: String,
+          archivo: { type: String, default: null },
           estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
+            nombre: { type: String, default: null },
+            motivo: { type: String, default: null },
+            fecha: { type: Date, default: null }
           }
         },
         dictamen: {
-          archivo: String,
+          archivo: { type: String, default: null },
           estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
+            nombre: { type: String, default: null },
+            motivo: { type: String, default: null },
+            fecha: { type: Date, default: null }
           }
         },
         protesta: { // Protesta de Ley
-          archivo: String,
+          archivo: { type: String, default: null },
           estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
+            nombre: { type: String, default: null },
+            motivo: { type: String, default: null },
+            fecha: { type: Date, default: null }
           }
         },
         cta: {  // Carta terminacion
-          archivo: String,
+          archivo: { type: String, default: null },
           estado: {
-            nombre: String,
-            motivo: String,
-            fecha: Date
+            nombre: { type: String, default: null },
+            motivo: { type: String, default: null },
+            fecha: { type: Date, default: null }
           }
         }
       }
@@ -182,3 +228,6 @@ const estadiaSchema = new mongoose.Schema(
 )
 
 module.exports = mongoose.model('Estadia', estadiaSchema)
+
+
+*/

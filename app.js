@@ -43,6 +43,10 @@ app.use('/alumnos', alumnosRouter);
 const estadiasRouter = require('./routes/estadias');
 app.use('/estadias', estadiasRouter);
 
+// Lado del asesor
+const ladoAsesorRouter = require('./routes/lado-asesor');
+app.use('/asesor', ladoAsesorRouter);
+
 app.listen(3000, () => {
   console.log('Server started on port 3000');
 });

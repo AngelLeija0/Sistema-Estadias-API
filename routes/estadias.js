@@ -21,8 +21,7 @@ router.post('/:ruta', async (req, res) => {
     const ruta = req.params.ruta; // carta presentacion, anteproyecto, avance, documentos
     const objEstadia = {
       idAsesor: new ObjectId(req.body.idAsesor),
-      idAlumno: new ObjectId(req.body.idAlumno),
-      fechaRegistro: new Date(req.body.fechaRegistro)
+      idAlumno: new ObjectId(req.body.idAlumno)
     }
 
     if (ruta == "carta presentacion" && req.body.cartaPresentacion) {
@@ -127,7 +126,7 @@ router.post('/:ruta', async (req, res) => {
         }
       }
     }
-    
+
     if (ruta == "documentos" && req.body.documentos) {
       objEstadia.documentos = {};
       if (req.body.documentos.curriculum) {
@@ -222,7 +221,9 @@ router.post('/:ruta', async (req, res) => {
       }
     }
     const estadia = new Estadia(objEstadia);
-    const newEstadia = await Estadia.save();
+    const newEstadia = await estadia.save();
+    console.log(estadia)
+    console.log(estadia);
     res.status(201).json(newEstadia);
   } catch (error) {
     res.status(400).json({ message: error.message });

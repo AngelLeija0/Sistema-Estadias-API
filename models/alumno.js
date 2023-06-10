@@ -16,10 +16,10 @@ const alumnoSchema = new mongoose.Schema(
       }
     },
     datosAcademicos: {
-      idCarrera: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'carreras'
-      },
+      nivelAcademico: String, // TSU, Ingenieria, Posgrado
+      turno: String,
+      carrera: String,
+      area: String,
       grado: String,
       grupo: String
     },
