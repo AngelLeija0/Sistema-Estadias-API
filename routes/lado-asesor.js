@@ -95,7 +95,7 @@ router.post('/alumno', async (req, res) => {
 });
 
 // PATCH - Subir avance / modificar etapa
-router.patch('/alumno/avance/', async (req, res) => {
+router.patch('/alumno/avance', async (req, res) => {
     try {
         const etapa = req.body.etapa;
         const idAlumno = req.body.idAlumno;

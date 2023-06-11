@@ -19,7 +19,7 @@ router.post('/cpa', async (req, res) => {
         }
         const estadia = await Estadia.findOne(filtro);
 
-        if (estadia != null || estadia != {}) {
+        if (estadia !== null && estadia !== undefined) {
             const infoCPA = {
                 estado: {
                     nombre: estadia.cartaPresentacion.estado.nombre,
@@ -207,14 +207,276 @@ router.post('/documento/subir', async (req, res) => {
     }
 });
 
-/* Seguimiento Academico  */
-
-// POST - Crear un anteproyecto
-router.post('academico/anteproyecto/crear', async (req, res) => {
+// POST - Ver estado de documentos
+router.post('/documentos', async (req, res) => {
     try {
-        
+        const idAlumno = req.body.idAlumno;
+        const filtro = {
+            idAlumno: new ObjectId(idAlumno)
+        }
+        const estadia = await Estadia.findOne(filtro);
+        const documentos = estadia.documentos;
+        if (documentos === null && documentos === undefined) {
+            const infoDocumentos = {}
+            if (documentos.curriculum) {
+                infoDocumentos.curriculum = {
+                    archivo: documentos.curriculum.archivo,
+                    estado: {
+                        nombre: documentos.curriculum.estado.nombre,
+                        motivo: documentos.curriculum.estado.motivo,
+                        fecha: documentos.curriculum.estado.fecha
+                    }
+                }
+            }
+            if (documentos.nss) {
+                infoDocumentos.nss = {
+                    archivo: documentos.nss.archivo,
+                    estado: {
+                        nombre: documentos.nss.estado.nombre,
+                        motivo: documentos.nss.estado.motivo,
+                        fecha: documentos.nss.estado.fecha
+                    }
+                }
+            }
+            if (documentos.cpa) {
+                infoDocumentos.cpa = {
+                    archivo: documentos.cpa.archivo,
+                    estado: {
+                        nombre: documentos.cpa.estado.nombre,
+                        motivo: documentos.cpa.estado.motivo,
+                        fecha: documentos.cpa.estado.fecha
+                    }
+                }
+            }
+            if (documentos.caa) {
+                infoDocumentos.caa = {
+                    archivo: documentos.caa.archivo,
+                    estado: {
+                        nombre: documentos.caa.estado.nombre,
+                        motivo: documentos.caa.estado.motivo,
+                        fecha: documentos.caa.estado.fecha
+                    }
+                }
+            }
+            if (documentos.reporte) {
+                infoDocumentos.reporte = {
+                    archivo: documentos.reporte.archivo,
+                    estado: {
+                        nombre: documentos.reporte.estado.nombre,
+                        motivo: documentos.reporte.estado.motivo,
+                        fecha: documentos.reporte.estado.fecha
+                    }
+                }
+            }
+            if (documentos.rubrica) {
+                infoDocumentos.rubrica = {
+                    archivo: documentos.rubrica.archivo,
+                    estado: {
+                        nombre: documentos.rubrica.estado.nombre,
+                        motivo: documentos.rubrica.estado.motivo,
+                        fecha: documentos.rubrica.estado.fecha
+                    }
+                }
+            }
+            if (documentos.dictamen) {
+                infoDocumentos.dictamen = {
+                    archivo: documentos.dictamen.archivo,
+                    estado: {
+                        nombre: documentos.dictamen.estado.nombre,
+                        motivo: documentos.dictamen.estado.motivo,
+                        fecha: documentos.dictamen.estado.fecha
+                    }
+                }
+            }
+            if (documentos.protesta) {
+                infoDocumentos.protesta = {
+                    archivo: documentos.protesta.archivo,
+                    estado: {
+                        nombre: documentos.protesta.estado.nombre,
+                        motivo: documentos.protesta.estado.motivo,
+                        fecha: documentos.protesta.estado.fecha
+                    }
+                }
+            }
+            if (documentos.cta) {
+                infoDocumentos.cta = {
+                    archivo: documentos.cta.archivo,
+                    estado: {
+                        nombre: documentos.cta.estado.nombre,
+                        motivo: documentos.cta.estado.motivo,
+                        fecha: documentos.cta.estado.fecha
+                    }
+                }
+            }
+            res.json(infoDocumentos);
+        } else {
+            res.json("No se encontraron documentos");
+        }
     } catch (error) {
         res.status(400).json({ message: error.message });
+    }
+});
+
+/* Seguimiento Academico  */
+
+// POST - Ver informacion y estado de anteprocto
+router.get('/academico/anteproyecto', async (req, res) => {
+    try {
+        const idAlumno = req.body.idAlumno;
+        const filtro = {
+            idAlumno: new ObjectId(idAlumno)
+        }
+        const estadia = await Estadia.findOne(filtro);
+        const anteproyecto = estadia.anteproyecto;
+
+        if (anteproyecto !== null && anteproyecto !== undefined) {
+            const infoAnteproyecto = {
+                datosEmpresa: {
+                    nombreEmpresa: anteproyecto.datosEmpresa.nombreEmpresa,
+                    emailEmpresario: anteproyecto.datosEmpresa.emailEmpresario,
+                    telefonoEmpresario: anteproyecto.datosEmpresa.telefonoEmpresario
+                },
+                datosProyecto: {
+                    nombre: anteproyecto.datosProyecto.nombre,
+                    objetivo: anteproyecto.datosProyecto.objetivo,
+                    descripcion: anteproyecto.datosProyecto.descripcion
+                },
+                estado: {
+                    nombre: anteproyecto.estado.nombre,
+                    motivo: anteproyecto.estado.motivo,
+                    fecha: anteproyecto.estado.fecha
+                },
+                fechaRegistro: anteproyecto.fechaRegistro
+            }
+            res.json(infoAnteproyecto);
+        } else {
+            res.json("No se encontro ningun anteproyecto")
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// POST - Crear un anteproyecto
+router.post('/academico/anteproyecto/crear', async (req, res) => {
+    try {
+        const idAlumno = req.body.idAlumno;
+        const filtro = {
+            idAlumno: new ObjectId(idAlumno)
+        }
+        const estadia = await Estadia.findOne(filtro);
+
+        estadia.anteproyecto = {
+            datosEmpresa: {
+                nombreEmpresa: req.body.anteproyecto.datosEmpresa.nombreEmpresa,
+                emailEmpresario: req.body.anteproyecto.datosEmpresa.emailEmpresario,
+                telefonoEmpresario: req.body.anteproyecto.datosEmpresa.telefonoEmpresario
+            },
+            datosProyecto: {
+                nombre: req.body.anteproyecto.datosProyecto.nombre,
+                objetivo: req.body.anteproyecto.datosProyecto.objetivo,
+                descripcion: req.body.anteproyecto.datosProyecto.descripcion
+            },
+            estado: {
+                nombre: req.body.anteproyecto.estado.nombre,
+                motivo: req.body.anteproyecto.estado.motivo,
+                fecha: req.body.anteproyecto.estado.fecha
+            },
+            fechaRegistro: req.body.anteproyecto.fechaRegistro
+        }
+        const newAnteproyecto = await estadia.save();
+        res.status(201).json(newAnteproyecto);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// PATCH - Modificar un anteproyecto
+router.patch('/academico/anteproyecto/modificar', async (req, res) => {
+    try {
+        const idAlumno = req.body.idAlumno;
+        const filtro = {
+            idAlumno: new ObjectId(idAlumno)
+        }
+        const estadia = await Estadia.findOne(filtro);
+
+        const anteproyecto = req.body.anteproyecto;
+
+        const datosEmpresa = anteproyecto.datosEmpresa;
+        estadia.anteproyecto.datosEmpresa.emailEmpresario = datosEmpresa.emailEmpresario || estadia.anteproyecto.datosEmpresa.emailEmpresario;
+        estadia.anteproyecto.datosEmpresa.telefonoEmpresario = datosEmpresa.telefonoEmpresario || estadia.anteproyecto.datosEmpresa.telefonoEmpresario;
+
+        const datosProyecto = anteproyecto.datosProyecto;
+        estadia.anteproyecto.datosProyecto.nombre = datosProyecto.nombre || estadia.anteproyecto.datosProyecto.nombre;
+        estadia.anteproyecto.datosProyecto.objetivo = datosProyecto.objetivo || estadia.anteproyecto.datosProyecto.objetivo;
+        estadia.anteproyecto.datosProyecto.descripcion = datosProyecto.descripcion || estadia.anteproyecto.datosProyecto.descripcion;
+
+        estadia.anteproyecto.estado.nombre = anteproyecto.estado.nombre || estadia.anteproyecto.estado.nombre;
+        estadia.anteproyecto.estado.motivo = anteproyecto.estado.motivo || estadia.anteproyecto.estado.motivo;
+        estadia.anteproyecto.estado.fecha = anteproyecto.estado.fecha || estadia.anteproyecto.estado.fecha;
+
+        estadia.anteproyecto.fechaRegistro = anteproyecto.fechaRegistro || estadia.anteproyecto.fechaRegistro;
+        const updatedAnteproyecto = await estadia.save();
+        res.json(updatedAnteproyecto);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// POST - Ver informacion y estado de Avance
+router.get('/academico/anteproyecto', async (req, res) => {
+    try {
+        const idAlumno = req.body.idAlumno;
+        const filtro = {
+            idAlumno: new ObjectId(idAlumno)
+        }
+        const estadia = await Estadia.findOne(filtro);
+        const avance = estadia.avance;
+
+        if (avance !== null && avance !== undefined) {
+            console.log("entra al if");
+            const infoAvance = {
+                progreso: avance.progreso,
+                etapa1: {
+                    nombre: avance.etapa1.nombre,
+                    motivo: avance.etapa1.motivo,
+                    fecha: avance.etapa1.fecha
+                },
+            }
+            if (avance.etapa2) {
+                infoAvance.etapa2 = {
+                    nombre: avance.etapa2.nombre,
+                    motivo: avance.etapa2.motivo,
+                    fecha: avance.etapa1.fecha
+                }
+            }
+            if (avance.etapa3) {
+                infoAvance.etapa3 = {
+                    nombre: avance.etapa3.nombre,
+                    motivo: avance.etapa3.motivo,
+                    fecha: avance.etapa3.fecha
+                }
+            }
+            if (avance.etapa4) {
+                infoAvance.etapa4 = {
+                    nombre: avance.etapa4.nombre,
+                    motivo: avance.etapa4.motivo,
+                    fecha: avance.etapa4.fecha
+                }
+            }
+            if (avance.etapa5) {
+                infoAvance.etapa5 = {
+                    nombre: avance.etapa5.nombre,
+                    motivo: avance.etapa5.motivo,
+                    fecha: avance.etapa5.fecha
+                }
+            }
+            res.json(infoAvance);
+        } else {
+            res.json("No se encontro ningun avance")
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 
