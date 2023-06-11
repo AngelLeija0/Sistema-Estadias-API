@@ -1,7 +1,0 @@
-POST http://localhost:3000/estadias/null
-Content-Type: application/json
-
-{
-    "idAsesor": "6483b522848d59b4db611778",
-    "idAlumno": "64820700f1819ef160c31dc3"
-}

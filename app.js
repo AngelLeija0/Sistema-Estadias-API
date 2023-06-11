@@ -23,7 +23,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-/* ----- Rutas back-end ----- */
+/* ----- Rutas back-end o para pruebas ----- */
 
 // Administrador
 const administradoresRouter = require('./routes/administradores');
