@@ -30,15 +30,14 @@ router.post('/inicio', async (req, res) => {
                     { 'datosPersonales.nombres.apMaterno': regex },
                     { 'datosPersonales.privado.matricula': regex },
                 ];
-                const nombreParts = textoBusqueda.split(" ");
+                const numeroPartes = textoBusqueda.split(" ");
                 if (nombreParts.length >= 2) {
-                    const firstName = nombreParts.slice(0, nombreParts.length - 2).join(" ");
-                    const lastName1 = nombreParts[nombreParts.length - 2];
-                    const lastName2 = nombreParts[nombreParts.length - 1];
-
-                    busqueda.$or.push({ 'datosPersonales.nombres.nombre': firstName });
-                    busqueda.$or.push({ 'datosPersonales.nombres.apPaterno': lastName1 });
-                    busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': lastName2 });
+                    const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
+                    const apPaterno = numeroPartes[numeroPartes.length - 2];
+                    const apMaterno = numeroPartes[numeroPartes.length - 1];
+                    busqueda.$or.push({ 'datosPersonales.nombres.nombre': nombre });
+                    busqueda.$or.push({ 'datosPersonales.nombres.apPaterno': apPaterno });
+                    busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': apMaterno });
                 }
             }
             if (filtro.nivelAcademico) {
