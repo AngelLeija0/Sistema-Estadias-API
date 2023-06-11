@@ -21,15 +21,22 @@ router.post('/inicio', async (req, res) => {
             const busqueda = {
                 _id: new ObjectId(idAlumno)
             };
-
+            if (filtro.buscador) {
+                const textoBusqueda = filtro.buscador;
+                const regex = new RegExp(textoBusqueda, 'i');
+                busqueda.$or = [
+                    { 'datosPersonales.nombres.nombre': regex },
+                    { 'datosPersonales.nombres.apPaterno': regex },
+                    { 'datosPersonales.nombres.apMaterno': regex },
+                    { 'datosPersonales.privado.matricula': regex },
+                ];
+            }
             if (filtro.nivelAcademico) {
                 busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
             }
-
             if (filtro.carrera) {
                 busqueda["datosAcademicos.carrera"] = filtro.carrera;
             }
-
             if (filtro.area) {
                 busqueda["datosAcademicos.area"] = filtro.area;
             }
@@ -84,9 +91,6 @@ router.post('/alumno', async (req, res) => {
                 asesorEmpresarial: estadia.anteproyecto.datosEmpresa.nombreEmpresario
             };
             infoAlumno.avance = estadia.avance
-        } else {
-            infoAlumno.anteproyecto = "Aun no ha sido iniciado";
-            infoAlumno.avance = "Aun no hay ningun avance"
         }
         res.json(infoAlumno);
     } catch (error) {
