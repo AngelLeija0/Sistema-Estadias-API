@@ -30,6 +30,16 @@ router.post('/inicio', async (req, res) => {
                     { 'datosPersonales.nombres.apMaterno': regex },
                     { 'datosPersonales.privado.matricula': regex },
                 ];
+                const nombreParts = textoBusqueda.split(" ");
+                if (nombreParts.length >= 2) {
+                    const firstName = nombreParts.slice(0, nombreParts.length - 2).join(" ");
+                    const lastName1 = nombreParts[nombreParts.length - 2];
+                    const lastName2 = nombreParts[nombreParts.length - 1];
+
+                    busqueda.$or.push({ 'datosPersonales.nombres.nombre': firstName });
+                    busqueda.$or.push({ 'datosPersonales.nombres.apPaterno': lastName1 });
+                    busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': lastName2 });
+                }
             }
             if (filtro.nivelAcademico) {
                 busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;

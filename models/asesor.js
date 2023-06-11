@@ -16,6 +16,12 @@ const asesorSchema = new mongoose.Schema(
         password: String
       }
     },
+    datosAcademicos: {
+      nivelAcademico: String,
+      turno: String,
+      carrera: String,
+      area: String,
+    },
     fechaRegistro: Date
   },
   {
