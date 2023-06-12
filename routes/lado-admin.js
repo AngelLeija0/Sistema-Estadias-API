@@ -7,6 +7,7 @@ const router = express.Router();
 const Estadia = require('../models/estadia');
 const Asesor = require('../models/asesor');
 const Alumno = require('../models/alumno');
+const alumno = require('../models/alumno');
 
 /* Alumnos */
 
@@ -335,6 +336,87 @@ router.post('/asesor', async(req, res) => {
         res.json(asesor);
     } catch (error) {
         res.status(400).json({ message: error.message });
+    }
+});
+
+// POST - Perfil asesor, alumnos asesorados
+router.post('/asesor/alumnos', async (req, res) => {
+    try {
+        const idAsesor = req.body.idAsesor;
+        let alumnos = [];
+        const estadias = await Estadia.find({
+            idAsesor: new ObjectId(idAsesor)
+        });
+        for (const estadia of estadias) {
+            const idAlumno = estadia._doc.idAlumno;
+            const busqueda = {
+                _id: new ObjectId(idAlumno)
+            };
+            const alumno = await Alumno.findOne(busqueda);
+            if (alumno) {
+                const infoAlumno = {
+                    idAlumno: idAlumno,
+                    nombre: alumno.datosPersonales.nombres.nombre,
+                    apPaterno: alumno.datosPersonales.nombres.apPaterno,
+                    apMaterno: alumno.datosPersonales.nombres.apMaterno,
+                    matricula: alumno.datosPersonales.privado.matricula,
+                    nivelAcademico: alumno.datosAcademicos.nivelAcademico,
+                    carrera: alumno.datosAcademicos.carrera,
+                    area: alumno.datosAcademicos.area
+                };
+                alumnos.push(infoAlumno);
+            }
+        }
+        res.json(alumnos);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// POST - Perfil asesor, agregar alumno para asesorar
+router.post('/asesor/alumno/buscar', async (req, res) => {
+    try {
+        const idAlumno = req.body.idAlumno;
+
+        const estadia = await Estadia.findOne({
+            idAlumno: new ObjectId(idAlumno)
+        });
+
+        if (!estadia){
+            return res.json("Alumno no encontrado");
+        }
+        if (!estadia.idAsesor || estadia.idAsesor == null){ // Si el idAsesor esta vacio
+            return res.json("Alumno sin asesor")
+        } else {
+            const asesor = await Estadia.findById(estadia.idAsesor);
+            const nombre = asesor.datosPersonales.nombres.nombre;
+            const apPaterno = asesor.datosPersonales.nombres.apPaterno;
+            const apMaterno = asesor.datosPersonales.nombres.apMaterno;
+            const nombreCompleto = `${nombre} ${apPaterno} ${apMaterno}`;
+            const respuesta = {
+                mensaje: "Alumno con asesor",
+                asesor: nombreCompleto
+            }
+            return res.json(respuesta);
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+router.patch('/asesor/alumno/asignar', async (req, res) => {
+    try {
+        const idAsesor = req.body.idAsesor;
+        const idAlumno = req.body.idAlumno;
+
+        const estadia = await Estadia.findOne({
+            idAlumno: new ObjectId(idAlumno)
+        });
+        estadia.idAsesor ??= {}; // Si el alumno no tiene idAsesor 
+        estadia.idAsesor = new ObjectId(idAsesor) || estadia.idAsesor;
+        const newAsesor = estadia.save();
+        res.json(newAsesor);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 
