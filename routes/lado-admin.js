@@ -32,7 +32,7 @@ router.post('/alumnos/proceso', async (req, res) => {
                         { 'datosPersonales.privado.matricula': regex },
                     ];
                     const numeroPartes = textoBusqueda.split(" ");
-                    if (nombreParts.length >= 2) {
+                    if (numeroPartes.length >= 2) {
                         const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
                         const apPaterno = numeroPartes[numeroPartes.length - 2];
                         const apMaterno = numeroPartes[numeroPartes.length - 1];
@@ -94,7 +94,7 @@ router.post('/alumnos/liberados', async (req, res) => {
                         { 'datosPersonales.privado.matricula': regex },
                     ];
                     const numeroPartes = textoBusqueda.split(" ");
-                    if (nombreParts.length >= 2) {
+                    if (numeroPartes.length >= 2) {
                         const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
                         const apPaterno = numeroPartes[numeroPartes.length - 2];
                         const apMaterno = numeroPartes[numeroPartes.length - 1];
@@ -162,7 +162,7 @@ router.post('/alumnos/historial', async (req, res) => {
                     { 'datosPersonales.privado.matricula': regex },
                 ];
                 const numeroPartes = textoBusqueda.split(" ");
-                if (nombreParts.length >= 2) {
+                if (numeroPartes.length >= 2) {
                     const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
                     const apPaterno = numeroPartes[numeroPartes.length - 2];
                     const apMaterno = numeroPartes[numeroPartes.length - 1];
@@ -263,7 +263,7 @@ router.post('/asesores', async (req, res) => {
                     { 'datosPersonales.nombres.apMaterno': regex }
                 ];
                 const numeroPartes = textoBusqueda.split(" ");
-                if (nombreParts.length >= 2) {
+                if (numeroPartes.length >= 2) {
                     const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
                     const apPaterno = numeroPartes[numeroPartes.length - 2];
                     const apMaterno = numeroPartes[numeroPartes.length - 1];
@@ -301,6 +301,41 @@ router.post('/asesores', async (req, res) => {
     }
 });
 
+// POST - Crear nuevo asesor
+router.post('/asesores/crear', async (req, res) => {
+    try {
+        const asesor = new Asesor({
+            datosPersonales: {
+                nombres: {
+                    nombre: req.body.datosPersonales.nombres.nombre,
+                    apPaterno: req.body.datosPersonales.nombres.apPaterno,
+                    apMaterno: req.body.datosPersonales.nombres.apMaterno
+                },
+                privado: {
+                    email: req.body.datosPersonales.privado.email,
+                    telefono: req.body.datosPersonales.privado.telefono,
+                    username: req.body.datosPersonales.privado.username,
+                    password: req.body.datosPersonales.privado.password
+                },
+            },
+            fechaRegistro: new Date(req.body.fechaRegistro)
+        });
+        const newAsesor = await asesor.save();
+        res.status(201).json(newAsesor);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
 
+// POST - Perfil de asesor (informacion general)
+router.post('/asesor', async(req, res) => {
+    try {
+        const idAsesor = req.body.asesor;
+        const asesor = await Asesor.findById(idAsesor);
+        res.json(asesor);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
 
 module.exports = router;
