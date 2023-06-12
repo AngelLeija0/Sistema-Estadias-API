@@ -31,7 +31,7 @@ router.post('/inicio', async (req, res) => {
                     { 'datosPersonales.privado.matricula': regex },
                 ];
                 const numeroPartes = textoBusqueda.split(" ");
-                if (nombreParts.length >= 2) {
+                if (numeroPartes.length >= 2) {
                     const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
                     const apPaterno = numeroPartes[numeroPartes.length - 2];
                     const apMaterno = numeroPartes[numeroPartes.length - 1];
