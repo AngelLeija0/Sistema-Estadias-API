@@ -4,6 +4,8 @@ const { ObjectId } = mongoose.Types;
 const express = require('express');
 const router = express.Router();
 
+const ExcelJS = require('exceljs');
+
 const Estadia = require('../models/estadia');
 const Asesor = require('../models/asesor');
 const Alumno = require('../models/alumno');
@@ -72,7 +74,7 @@ router.post('/alumnos/proceso', async (req, res) => {
     }
 });
 
-// POST - Busqueda de alumnos en proceso de estadias
+// POST - Generar excel de alumnos en proceso de estadias (filtrados por nivel academico, carrera o area)
 router.post('/alumnos/proceso/excel', async (req, res) => {
     try {
         let alumnos = [];
@@ -112,14 +114,37 @@ router.post('/alumnos/proceso/excel', async (req, res) => {
                 }
             }
         }
-        res.json(alumnos);
+        const data = alumnos;
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Datos');
+
+        worksheet.columns = [
+            { header: 'Nombre', key: 'nombre' },
+            { header: 'Apellido paterno', key: 'apPaterno' },
+            { header: 'Apellido materno', key: 'apMaterno' },
+            { header: 'Matricula', key: 'matricula' },
+            { header: 'Nivel academico', key: 'nivelAcademico' },
+            { header: 'Carrera', key: 'carrera' },
+            { header: 'Area', key: 'area' },
+        ];
+
+        data.forEach((row) => {
+            worksheet.addRow(row);
+        });
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=alumnos-en-proceso.xlsx');
+
+        return workbook.xlsx.write(res).then(() => {
+            res.status(200).end();
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
 
 // POST - Busqueda de alumnos liberados del proceso de estadias
-router.post('/alumnos/liberados', async (req, res) => {
+router.post('/alumnos/liberados/excel', async (req, res) => {
     try {
         let alumnos = [];
         const filtro = req.body.filtro
@@ -181,7 +206,82 @@ router.post('/alumnos/liberados', async (req, res) => {
                 }
             }
         }
-        res.json(alumnos);
+        const data = alumnos;
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Datos');
+
+        worksheet.columns = [
+            { header: 'Nombre', key: 'nombre' },
+            { header: 'Apellido paterno', key: 'apPaterno' },
+            { header: 'Apellido materno', key: 'apMaterno' },
+            { header: 'Matricula', key: 'matricula' },
+            { header: 'Nivel academico', key: 'nivelAcademico' },
+            { header: 'Carrera', key: 'carrera' },
+            { header: 'Area', key: 'area' },
+        ];
+
+        data.forEach((row) => {
+            worksheet.addRow(row);
+        });
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=alumnos-liberados.xlsx');
+
+        return workbook.xlsx.write(res).then(() => {
+            res.status(200).end();
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// POST - Generar excel de alumnos liberados del proceso de estadias
+router.post('/alumnos/liberados', async (req, res) => {
+    try {
+        let alumnos = [];
+        const filtro = req.body.filtro;
+        const busqueda = {};
+        if (filtro.buscador) {
+            return res.status(500).json({ message: "No se puede generar un archivo de Excel para un solo alumno." });
+        }
+        if (filtro.año) {
+            busqueda["cartaPresentacion.datosAcademicos.año"] = filtro.año;
+        }
+        if (filtro.periodo) {
+            busqueda["cartaPresentacion.datosAcademicos.periodo"] = filtro.periodo;
+        }
+        const estadias = await Estadia.find(busqueda);
+        for (const estadia of estadias) {
+            if (estadia.documentos.cta.estado.nombre == "Aceptada" && estadia.avance.progreso == 100) {
+                const idAlumno = estadia._doc.idAlumno;
+                const busqueda = {
+                    _id: new ObjectId(idAlumno)
+                };
+                if (filtro.nivelAcademico) {
+                    busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
+                }
+                if (filtro.carrera) {
+                    busqueda["datosAcademicos.carrera"] = filtro.carrera;
+                }
+                if (filtro.area) {
+                    busqueda["datosAcademicos.area"] = filtro.area;
+                }
+                const alumno = await Alumno.findOne(busqueda);
+                if (alumno) {
+                    const infoAlumno = {
+                        idAlumno: idAlumno,
+                        nombre: alumno.datosPersonales.nombres.nombre,
+                        apPaterno: alumno.datosPersonales.nombres.apPaterno,
+                        apMaterno: alumno.datosPersonales.nombres.apMaterno,
+                        matricula: alumno.datosPersonales.privado.matricula,
+                        nivelAcademico: alumno.datosAcademicos.nivelAcademico,
+                        carrera: alumno.datosAcademicos.carrera,
+                        area: alumno.datosAcademicos.area
+                    };
+                    alumnos.push(infoAlumno);
+                }
+            }
+        }
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -193,6 +293,9 @@ router.post('/alumnos/historial', async (req, res) => {
         let alumnos = [];
         const filtro = req.body.filtro;
         const busqueda = {}
+        if (filtro.buscador) {
+            return res.status(500).json({ message: "No se puede generar un archivo de Excel para un solo alumno." });
+        }
         if (filtro.año) {
             busqueda["cartaPresentacion.datosAcademicos.año"] = filtro.año;
         }
@@ -205,25 +308,6 @@ router.post('/alumnos/historial', async (req, res) => {
             const busqueda = {
                 _id: new ObjectId(idAlumno)
             };
-            if (filtro.buscador) {
-                const textoBusqueda = filtro.buscador;
-                const regex = new RegExp(textoBusqueda, 'i');
-                busqueda.$or = [
-                    { 'datosPersonales.nombres.nombre': regex },
-                    { 'datosPersonales.nombres.apPaterno': regex },
-                    { 'datosPersonales.nombres.apMaterno': regex },
-                    { 'datosPersonales.privado.matricula': regex },
-                ];
-                const numeroPartes = textoBusqueda.split(" ");
-                if (numeroPartes.length >= 2) {
-                    const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
-                    const apPaterno = numeroPartes[numeroPartes.length - 2];
-                    const apMaterno = numeroPartes[numeroPartes.length - 1];
-                    busqueda.$or.push({ 'datosPersonales.nombres.nombre': nombre });
-                    busqueda.$or.push({ 'datosPersonales.nombres.apPaterno': apPaterno });
-                    busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': apMaterno });
-                }
-            }
             if (filtro.nivelAcademico) {
                 busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
             }
@@ -248,7 +332,7 @@ router.post('/alumnos/historial', async (req, res) => {
                 alumnos.push(infoAlumno);
             }
         }
-        res.json(alumnos);
+        
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -354,6 +438,87 @@ router.post('/asesores', async (req, res) => {
     }
 });
 
+// POST - Busqueda de todos los asesores
+router.post('/asesores/excel', async (req, res) => {
+    try {
+        let asesores = [];
+        const filtro = req.body.filtro;
+        if (filtro.buscador) {
+            return res.status(500).json({ message: "No se puede generar un archivo de Excel para un solo alumno." });
+        }
+        const estadias = await Estadia.find();
+        for (const estadia of estadias) {
+            const idAsesor = estadia._doc.idAsesor;
+            const busqueda = {
+                _id: new ObjectId(idAsesor)
+            };
+            if (filtro.buscador) {
+                const textoBusqueda = filtro.buscador;
+                const regex = new RegExp(textoBusqueda, 'i');
+                busqueda.$or = [
+                    { 'datosPersonales.nombres.nombre': regex },
+                    { 'datosPersonales.nombres.apPaterno': regex },
+                    { 'datosPersonales.nombres.apMaterno': regex }
+                ];
+                const numeroPartes = textoBusqueda.split(" ");
+                if (numeroPartes.length >= 2) {
+                    const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
+                    const apPaterno = numeroPartes[numeroPartes.length - 2];
+                    const apMaterno = numeroPartes[numeroPartes.length - 1];
+                    busqueda.$or.push({ 'datosPersonales.nombres.nombre': nombre });
+                    busqueda.$or.push({ 'datosPersonales.nombres.apPaterno': apPaterno });
+                    busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': apMaterno });
+                }
+            }
+            if (filtro.nivelAcademico) {
+                busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
+            }
+            if (filtro.carrera) {
+                busqueda["datosAcademicos.carrera"] = filtro.carrera;
+            }
+            if (filtro.area) {
+                busqueda["datosAcademicos.area"] = filtro.area;
+            }
+            const asesor = await Asesor.findOne(busqueda);
+            if (asesor) {
+                const infoAsesor = {
+                    idAsesor: idAsesor,
+                    nombre: asesor.datosPersonales.nombres.nombre,
+                    apPaterno: asesor.datosPersonales.nombres.apPaterno,
+                    apMaterno: asesor.datosPersonales.nombres.apMaterno,
+                    nivelAcademico: asesor.datosAcademicos.nivelAcademico,
+                    carrera: asesor.datosAcademicos.carrera,
+                    area: asesor.datosAcademicos.area
+                };
+                asesores.push(infoAsesor);
+            }
+        }
+        const data = asesores;
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Datos');
+
+        worksheet.columns = [
+            { header: 'Nombre', key: 'nombre' },
+            { header: 'Apellido paterno', key: 'apPaterno' },
+            { header: 'Apellido materno', key: 'apMaterno' },
+            { header: 'Carrera', key: 'carrera' }
+        ];
+
+        data.forEach((row) => {
+            worksheet.addRow(row);
+        });
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=alumnos-liberados.xlsx');
+
+        return workbook.xlsx.write(res).then(() => {
+            res.status(200).end();
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // POST - Crear nuevo asesor
 router.post('/asesores/crear', async (req, res) => {
     try {
@@ -381,7 +546,7 @@ router.post('/asesores/crear', async (req, res) => {
 });
 
 // POST - Perfil de asesor (informacion general)
-router.post('/asesor', async(req, res) => {
+router.post('/asesor', async (req, res) => {
     try {
         const idAsesor = req.body.asesor;
         const asesor = await Asesor.findById(idAsesor);
@@ -434,10 +599,10 @@ router.post('/asesor/alumno/buscar', async (req, res) => {
             idAlumno: new ObjectId(idAlumno)
         });
 
-        if (!estadia){
+        if (!estadia) {
             return res.json("Alumno no encontrado");
         }
-        if (!estadia.idAsesor || estadia.idAsesor == null){ // Si el idAsesor esta vacio
+        if (!estadia.idAsesor || estadia.idAsesor == null) { // Si el idAsesor esta vacio
             return res.json("Alumno sin asesor")
         } else {
             const asesor = await Estadia.findById(estadia.idAsesor);
