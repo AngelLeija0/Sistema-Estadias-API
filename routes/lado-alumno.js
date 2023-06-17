@@ -357,6 +357,36 @@ router.get('/academico/anteproyecto', async (req, res) => {
     }
 });
 
+// POST - Buscar asesores
+router.post('/academico/anteproyecto/asesores', async (req, res) => {
+    try {
+        const carrera = req.body.carrera;
+        const asesor = await Asesor.find({
+            "datosAcademicos.carrera": carrera
+        });
+        res.json(asesor);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+// POST - Asignar asesor
+router.post('/academico/anteproyecto/asesor/asignar', async (req, res) => {
+    try {
+        const idAsesor = req.body.idAsesor;
+        const idAlumno = req.body.idAlumno;
+
+        const estadia = await Estadia.find({
+            idAsesor: ObjectId(idAsesor),
+            idAlumno: ObjectId(idAlumno)
+        });
+        estadia.idAsesor = ObjectId(idAsesor) || estadia.idAsesor;
+        res.status(201).json(estadia);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+
 // POST - Crear un anteproyecto
 router.post('/academico/anteproyecto/crear', async (req, res) => {
     try {

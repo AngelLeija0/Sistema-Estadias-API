@@ -23,7 +23,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-/* ----- Rutas back-end o para pruebas ----- */
+/* ----- Rutas para Lado Administrador ----- */
 
 // Administrador
 const administradoresRouter = require('./routes/administradores');
@@ -41,24 +41,27 @@ app.use('/carreras', carrerasRouter);
 const alumnosRouter = require('./routes/alumnos');
 app.use('/alumnos', alumnosRouter);
 
-// Estadias
-const estadiasRouter = require('./routes/estadias');
-app.use('/estadias', estadiasRouter);
+// Lado administrador
+const adminRouter = require('./routes/lado-admin');
+app.use('/admin', adminRouter);
 
+/* ----- Ruta para Lado Vinculacion ----- */
 
-/* ----- Rutas front-end ----- */
+// Lado vinculacion
+const vinculacionRouter = require('./routes/lado-vinculacion');
+app.use('/vinc', vinculacionRouter);
+
+/* ----- Ruta para Lado Asesor ----- */
 
 // Lado del asesor
 const ladoAsesorRouter = require('./routes/lado-asesor');
 app.use('/asesor', ladoAsesorRouter);
 
+/* ----- Ruta para Lado Alumno ----- */
+
 // Lado alumno
 const alumnoRouter = require('./routes/lado-alumno');
 app.use('/alumno', alumnoRouter);
-
-// Lado administrador
-const adminRouter = require('./routes/lado-admin');
-app.use('/admin', adminRouter);
 
 
 app.listen(3000, () => {
