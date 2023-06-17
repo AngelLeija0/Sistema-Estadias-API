@@ -7,7 +7,6 @@ const router = express.Router();
 const Estadia = require('../models/estadia');
 const Asesor = require('../models/asesor');
 const Alumno = require('../models/alumno');
-const alumno = require('../models/alumno');
 
 /* Alumnos */
 
@@ -73,12 +72,65 @@ router.post('/alumnos/proceso', async (req, res) => {
     }
 });
 
+// POST - Busqueda de alumnos en proceso de estadias
+router.post('/alumnos/proceso/excel', async (req, res) => {
+    try {
+        let alumnos = [];
+        const filtro = req.body.filtro
+        if (filtro.buscador) {
+            return res.status(500).json({ message: "No se puede generar un archivo de Excel para un solo alumno." });
+        }
+        const estadias = await Estadia.find();
+        for (const estadia of estadias) {
+            if (!estadia.documentos || !estadia.documentos.cta || estadia.documentos.cta.estado.nombre !== "Aceptada") {
+                const idAlumno = estadia._doc.idAlumno;
+                const busqueda = {
+                    _id: new ObjectId(idAlumno)
+                };
+                if (filtro.nivelAcademico) {
+                    busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
+                }
+                if (filtro.carrera) {
+                    busqueda["datosAcademicos.carrera"] = filtro.carrera;
+                }
+                if (filtro.area) {
+                    busqueda["datosAcademicos.area"] = filtro.area;
+                }
+                const alumno = await Alumno.findOne(busqueda);
+                if (alumno) {
+                    const infoAlumno = {
+                        idAlumno: idAlumno,
+                        nombre: alumno.datosPersonales.nombres.nombre,
+                        apPaterno: alumno.datosPersonales.nombres.apPaterno,
+                        apMaterno: alumno.datosPersonales.nombres.apMaterno,
+                        matricula: alumno.datosPersonales.privado.matricula,
+                        nivelAcademico: alumno.datosAcademicos.nivelAcademico,
+                        carrera: alumno.datosAcademicos.carrera,
+                        area: alumno.datosAcademicos.area
+                    };
+                    alumnos.push(infoAlumno);
+                }
+            }
+        }
+        res.json(alumnos);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // POST - Busqueda de alumnos liberados del proceso de estadias
 router.post('/alumnos/liberados', async (req, res) => {
     try {
         let alumnos = [];
         const filtro = req.body.filtro
-        const estadias = await Estadia.find();
+        const busqueda = {}
+        if (filtro.año) {
+            busqueda["cartaPresentacion.datosAcademicos.año"] = filtro.año;
+        }
+        if (filtro.periodo) {
+            busqueda["cartaPresentacion.datosAcademicos.periodo"] = filtro.periodo;
+        }
+        const estadias = await Estadia.find(busqueda);
         for (const estadia of estadias) {
             if (estadia.documentos.cta.estado.nombre == "Aceptada" && estadia.avance.progreso == 100) {
                 const idAlumno = estadia._doc.idAlumno;
