@@ -12,6 +12,7 @@ const Alumno = require('../models/alumno');
 // POST - Login
 router.post('/', async (req, res) => {
     try {
+        console.log(req.body);
         const usuario = req.body.usuario;
         const password = req.body.password;
 
@@ -47,9 +48,9 @@ router.post('/', async (req, res) => {
         });
         if(admin !== null && admin !== undefined){
             response.id = admin._id;
-            response.nombres.nombre = admin.datosPersonales.nombres.nombre;
-            response.nombres.apPaterno = admin.datosPersonales.nombres.apPaterno;
-            response.nombres.apMaterno = admin.datosPersonales.nombres.apMaterno;
+            response.nombre = admin.datosPersonales.nombres.nombre;
+            response.apPaterno = admin.datosPersonales.nombres.apPaterno;
+            response.apMaterno = admin.datosPersonales.nombres.apMaterno;
             return res.json(response);
         }
 
