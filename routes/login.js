@@ -24,9 +24,9 @@ router.post('/', async (req, res) => {
         });
         if(alumno !== null && alumno !== undefined){
             response.id = alumno._id;
-            response.nombres.nombre = alumno.datosPersonales.nombres.nombre;
-            response.nombres.apPaterno = alumno.datosPersonales.nombres.apPaterno;
-            response.nombres.apMaterno = alumno.datosPersonales.nombres.apMaterno;
+            response.nombre = alumno.datosPersonales.nombres.nombre;
+            response.apPaterno = alumno.datosPersonales.nombres.apPaterno;
+            response.apMaterno = alumno.datosPersonales.nombres.apMaterno;
             return res.json(response);
         }
 
@@ -36,9 +36,9 @@ router.post('/', async (req, res) => {
         });
         if(asesor !== null && asesor !== undefined){
             response.id = asesor._id;
-            response.nombres.nombre = asesor.datosPersonales.nombres.nombre;
-            response.nombres.apPaterno = asesor.datosPersonales.nombres.apPaterno;
-            response.nombres.apMaterno = asesor.datosPersonales.nombres.apMaterno;
+            response.nombre = asesor.datosPersonales.nombres.nombre;
+            response.apPaterno = asesor.datosPersonales.nombres.apPaterno;
+            response.apMaterno = asesor.datosPersonales.nombres.apMaterno;
             return res.json(response);
         }
 
@@ -60,9 +60,9 @@ router.post('/', async (req, res) => {
         });
         if(vinculacion !== null && vinculacion !== undefined){
             response.id = vinculacion._id;
-            response.nombres.nombre = vinculacion.datosPersonales.nombres.nombre;
-            response.nombres.apPaterno = vinculacion.datosPersonales.nombres.apPaterno;
-            response.nombres.apMaterno = vinculacion.datosPersonales.nombres.apMaterno;
+            response.nombre = vinculacion.datosPersonales.nombres.nombre;
+            response.apPaterno = vinculacion.datosPersonales.nombres.apPaterno;
+            response.apMaterno = vinculacion.datosPersonales.nombres.apMaterno;
             return res.json(response);
         }
 
