@@ -22,20 +22,6 @@ router.get('/id/:id', async (req, res) => {
     }
 });
 
-// GET - Obtener administrador por id y por dato
-router.get('/id/:id/:filtro', async (req, res) => {
-    try {
-        const filtro = req.params.filtro;
-        filtro.idAsesor = req.params.id;
-
-        const administrador = await Administrador.find(filtro);
-
-        res.json(administrador);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
 // POST - Crear un nuevo administrador
 router.post('/', async (req, res) => {
     try {
