@@ -35,8 +35,8 @@ const administradoresRouter = require('./routes/administradores');
 app.use('/administradores', administradoresRouter);
 
 // Vinculacion
-const vinculacionRouter = require('./routes/vinculacion.js');
-app.use('/vinculacion', vinculacionRouter);
+const vinculadoresRouter = require('./routes/vinculacion.js');
+app.use('/vinculacion', vinculadoresRouter);
 
 // Asesores
 const asesoresRouter = require('./routes/asesores');

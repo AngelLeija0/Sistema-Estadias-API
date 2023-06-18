@@ -348,7 +348,6 @@ router.post('/alumno/perfil', async (req, res) => {
         })
         const infoAlumno = {
             idAlumno: idAlumno,
-            // Informacion general
             nombre: alumno.datosPersonales.nombres.nombre,
             apPaterno: alumno.datosPersonales.nombres.apPaterno,
             apMaterno: alumno.datosPersonales.nombres.apMaterno,
