@@ -4,10 +4,10 @@ const { ObjectId } = mongoose.Types;
 const express = require('express');
 const router = express.Router();
 
-const Admin = require('../models/administrador');
+const Administrador = require('../models/administrador');
+const Vinculacion = require('../models/vinculador');
 const Asesor = require('../models/asesor');
 const Alumno = require('../models/alumno');
-const administrador = require('../models/administrador');
 
 // POST - Login
 router.post('/', async (req, res) => {
@@ -41,17 +41,30 @@ router.post('/', async (req, res) => {
             return res.json(response);
         }
 
-        const admin = await administrador.findOne({
+        const admin = await Administrador.findOne({
             "datosPersonales.privado.username": usuario,
             "datosPersonales.privado.password": password
         });
         if(admin !== null && admin !== undefined){
-            response.id = asesor._id;
+            response.id = admin._id;
             response.nombres.nombre = admin.datosPersonales.nombres.nombre;
             response.nombres.apPaterno = admin.datosPersonales.nombres.apPaterno;
             response.nombres.apMaterno = admin.datosPersonales.nombres.apMaterno;
             return res.json(response);
         }
+
+        const vinculacion = await Vinculacion.findOne({
+            "datosPersonales.privado.username": usuario,
+            "datosPersonales.privado.password": password
+        });
+        if(vinculacion !== null && vinculacion !== undefined){
+            response.id = vinculacion._id;
+            response.nombres.nombre = vinculacion.datosPersonales.nombres.nombre;
+            response.nombres.apPaterno = vinculacion.datosPersonales.nombres.apPaterno;
+            response.nombres.apMaterno = vinculacion.datosPersonales.nombres.apMaterno;
+            return res.json(response);
+        }
+
         res.status(404).json("No se encontro ningun usuario");
     } catch (error) {
         res.status(500).json({ message: error.message });
