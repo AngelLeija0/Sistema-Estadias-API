@@ -12,7 +12,6 @@ const Alumno = require('../models/alumno');
 // POST - Login
 router.post('/', async (req, res) => {
     try {
-        console.log(req.body);
         const usuario = req.body.usuario;
         const password = req.body.password;
 
@@ -23,6 +22,7 @@ router.post('/', async (req, res) => {
             "datosPersonales.privado.password": password
         });
         if(alumno !== null && alumno !== undefined){
+            response.tipoUsuario = "alumno";
             response.id = alumno._id;
             response.nombre = alumno.datosPersonales.nombres.nombre;
             response.apPaterno = alumno.datosPersonales.nombres.apPaterno;
@@ -35,6 +35,7 @@ router.post('/', async (req, res) => {
             "datosPersonales.privado.password": password
         });
         if(asesor !== null && asesor !== undefined){
+            response.tipoUsuario = "asesor";
             response.id = asesor._id;
             response.nombre = asesor.datosPersonales.nombres.nombre;
             response.apPaterno = asesor.datosPersonales.nombres.apPaterno;
@@ -47,6 +48,7 @@ router.post('/', async (req, res) => {
             "datosPersonales.privado.password": password
         });
         if(admin !== null && admin !== undefined){
+            response.tipoUsuario = "administrador";
             response.id = admin._id;
             response.nombre = admin.datosPersonales.nombres.nombre;
             response.apPaterno = admin.datosPersonales.nombres.apPaterno;
@@ -59,6 +61,7 @@ router.post('/', async (req, res) => {
             "datosPersonales.privado.password": password
         });
         if(vinculacion !== null && vinculacion !== undefined){
+            response.tipoUsuario = "vinculacion";
             response.id = vinculacion._id;
             response.nombre = vinculacion.datosPersonales.nombres.nombre;
             response.apPaterno = vinculacion.datosPersonales.nombres.apPaterno;
