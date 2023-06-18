@@ -23,6 +23,11 @@ app.use(function(req, res, next) {
   next();
 });
 
+/* ----- Rutas para Login ----- */
+
+const loginRouter = require('./routes/login');
+app.use('/login', loginRouter);
+
 /* ----- Rutas para Lado Administrador ----- */
 
 // Administrador
