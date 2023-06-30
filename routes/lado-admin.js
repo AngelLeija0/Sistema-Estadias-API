@@ -301,6 +301,7 @@ router.post('/alumnos/liberados', async (req, res) => {
                 }
             }
         }
+        res.json(alumnos);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -367,7 +368,7 @@ router.post('/alumnos/historial', async (req, res) => {
                 alumnos.push(infoAlumno);
             }
         }
-        
+        res.json(alumnos);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
