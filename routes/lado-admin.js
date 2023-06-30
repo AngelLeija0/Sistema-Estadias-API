@@ -143,12 +143,15 @@ router.post('/alumnos/proceso/excel', async (req, res) => {
     }
 });
 
-// POST - Busqueda de alumnos liberados del proceso de estadias
+// POST - Generar Excel de alumnos liberados del proceso de estadias
 router.post('/alumnos/liberados/excel', async (req, res) => {
     try {
         let alumnos = [];
         const filtro = req.body.filtro
         const busqueda = {}
+        if (filtro.buscador){
+            return res.status(500).json({ message: "No se puede generar un archivo de Excel para un solo alumno." });
+        }
         if (filtro.año) {
             busqueda["cartaPresentacion.datosAcademicos.año"] = filtro.año;
         }
@@ -235,15 +238,12 @@ router.post('/alumnos/liberados/excel', async (req, res) => {
     }
 });
 
-// POST - Generar excel de alumnos liberados del proceso de estadias
+// POST - Busqueda de alumnos liberados del proceso de estadias
 router.post('/alumnos/liberados', async (req, res) => {
     try {
         let alumnos = [];
         const filtro = req.body.filtro;
         const busqueda = {};
-        if (filtro.buscador) {
-            return res.status(500).json({ message: "No se puede generar un archivo de Excel para un solo alumno." });
-        }
         if (filtro.año) {
             busqueda["cartaPresentacion.datosAcademicos.año"] = filtro.año;
         }
@@ -257,6 +257,25 @@ router.post('/alumnos/liberados', async (req, res) => {
                 const busqueda = {
                     _id: new ObjectId(idAlumno)
                 };
+                if (filtro.buscador) {
+                    const textoBusqueda = filtro.buscador;
+                    const regex = new RegExp(textoBusqueda, 'i');
+                    busqueda.$or = [
+                        { 'datosPersonales.nombres.nombre': regex },
+                        { 'datosPersonales.nombres.apPaterno': regex },
+                        { 'datosPersonales.nombres.apMaterno': regex },
+                        { 'datosPersonales.privado.matricula': regex },
+                    ];
+                    const numeroPartes = textoBusqueda.split(" ");
+                    if (numeroPartes.length >= 2) {
+                        const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
+                        const apPaterno = numeroPartes[numeroPartes.length - 2];
+                        const apMaterno = numeroPartes[numeroPartes.length - 1];
+                        busqueda.$or.push({ 'datosPersonales.nombres.nombre': nombre });
+                        busqueda.$or.push({ 'datosPersonales.nombres.apPaterno': apPaterno });
+                        busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': apMaterno });
+                    }
+                }
                 if (filtro.nivelAcademico) {
                     busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
                 }
@@ -293,9 +312,6 @@ router.post('/alumnos/historial', async (req, res) => {
         let alumnos = [];
         const filtro = req.body.filtro;
         const busqueda = {}
-        if (filtro.buscador) {
-            return res.status(500).json({ message: "No se puede generar un archivo de Excel para un solo alumno." });
-        }
         if (filtro.año) {
             busqueda["cartaPresentacion.datosAcademicos.año"] = filtro.año;
         }
@@ -308,6 +324,25 @@ router.post('/alumnos/historial', async (req, res) => {
             const busqueda = {
                 _id: new ObjectId(idAlumno)
             };
+            if (filtro.buscador) {
+                const textoBusqueda = filtro.buscador;
+                const regex = new RegExp(textoBusqueda, 'i');
+                busqueda.$or = [
+                    { 'datosPersonales.nombres.nombre': regex },
+                    { 'datosPersonales.nombres.apPaterno': regex },
+                    { 'datosPersonales.nombres.apMaterno': regex },
+                    { 'datosPersonales.privado.matricula': regex },
+                ];
+                const numeroPartes = textoBusqueda.split(" ");
+                if (numeroPartes.length >= 2) {
+                    const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
+                    const apPaterno = numeroPartes[numeroPartes.length - 2];
+                    const apMaterno = numeroPartes[numeroPartes.length - 1];
+                    busqueda.$or.push({ 'datosPersonales.nombres.nombre': nombre });
+                    busqueda.$or.push({ 'datosPersonales.nombres.apPaterno': apPaterno });
+                    busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': apMaterno });
+                }
+            }
             if (filtro.nivelAcademico) {
                 busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
             }
@@ -332,6 +367,101 @@ router.post('/alumnos/historial', async (req, res) => {
                 alumnos.push(infoAlumno);
             }
         }
+        
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// POST - Generar Excel de historial de alumnos
+router.post('/alumnos/historial/excel', async (req, res) => {
+    try {
+        let alumnos = [];
+        const filtro = req.body.filtro;
+        const busqueda = {}
+        if (filtro.buscador){
+            return res.status(500).json({ message: "No se puede generar un archivo de Excel para un solo alumno." });
+        }
+        if (filtro.año) {
+            busqueda["cartaPresentacion.datosAcademicos.año"] = filtro.año;
+        }
+        if (filtro.periodo) {
+            busqueda["cartaPresentacion.datosAcademicos.periodo"] = filtro.periodo;
+        }
+        const estadias = await Estadia.find(busqueda);
+        for (const estadia of estadias) {
+            const idAlumno = estadia._doc.idAlumno;
+            const busqueda = {
+                _id: new ObjectId(idAlumno)
+            };
+            if (filtro.buscador) {
+                const textoBusqueda = filtro.buscador;
+                const regex = new RegExp(textoBusqueda, 'i');
+                busqueda.$or = [
+                    { 'datosPersonales.nombres.nombre': regex },
+                    { 'datosPersonales.nombres.apPaterno': regex },
+                    { 'datosPersonales.nombres.apMaterno': regex },
+                    { 'datosPersonales.privado.matricula': regex },
+                ];
+                const numeroPartes = textoBusqueda.split(" ");
+                if (numeroPartes.length >= 2) {
+                    const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
+                    const apPaterno = numeroPartes[numeroPartes.length - 2];
+                    const apMaterno = numeroPartes[numeroPartes.length - 1];
+                    busqueda.$or.push({ 'datosPersonales.nombres.nombre': nombre });
+                    busqueda.$or.push({ 'datosPersonales.nombres.apPaterno': apPaterno });
+                    busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': apMaterno });
+                }
+            }
+            if (filtro.nivelAcademico) {
+                busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
+            }
+            if (filtro.carrera) {
+                busqueda["datosAcademicos.carrera"] = filtro.carrera;
+            }
+            if (filtro.area) {
+                busqueda["datosAcademicos.area"] = filtro.area;
+            }
+            const alumno = await Alumno.findOne(busqueda);
+            if (alumno) {
+                const infoAlumno = {
+                    idAlumno: idAlumno,
+                    nombre: alumno.datosPersonales.nombres.nombre,
+                    apPaterno: alumno.datosPersonales.nombres.apPaterno,
+                    apMaterno: alumno.datosPersonales.nombres.apMaterno,
+                    matricula: alumno.datosPersonales.privado.matricula,
+                    nivelAcademico: alumno.datosAcademicos.nivelAcademico,
+                    carrera: alumno.datosAcademicos.carrera,
+                    area: alumno.datosAcademicos.area
+                };
+                alumnos.push(infoAlumno);
+            }
+        }
+
+        const data = alumnos;
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Datos');
+
+        worksheet.columns = [
+            { header: 'Nombre', key: 'nombre' },
+            { header: 'Apellido paterno', key: 'apPaterno' },
+            { header: 'Apellido materno', key: 'apMaterno' },
+            { header: 'Matricula', key: 'matricula' },
+            { header: 'Nivel academico', key: 'nivelAcademico' },
+            { header: 'Carrera', key: 'carrera' },
+            { header: 'Area', key: 'area' },
+        ];
+
+        data.forEach((row) => {
+            worksheet.addRow(row);
+        });
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=alumnos-liberados.xlsx');
+
+        return workbook.xlsx.write(res).then(() => {
+            res.status(200).end();
+        });
         
     } catch (error) {
         res.status(500).json({ message: error.message });
