@@ -19,7 +19,7 @@ router.post('/cpa', async (req, res) => {
         }
         const estadia = await Estadia.findOne(filtro);
 
-        if (estadia !== null && estadia !== undefined) {
+        if (estadia.cartaPresentacion !== null && estadia.cartaPresentacion !== undefined) {
             const infoCPA = {
                 estado: {
                     nombre: estadia.cartaPresentacion.estado.nombre,
@@ -73,6 +73,11 @@ router.post('/cpa', async (req, res) => {
 router.post('/cpa/crear', async (req, res) => {
     try {
         const idAlumno = req.body.idAlumno;
+        const filtro = {
+            idAlumno: new ObjectId(idAlumno)
+        }
+        const estadia = await Estadia.findOne(filtro);
+
         const cpa = {
             estado: {
                 nombre: req.body.estado.nombre,
@@ -113,13 +118,9 @@ router.post('/cpa/crear', async (req, res) => {
             },
             fechaRegistro: new Date(req.body.fechaRegistro)
         }
-        const objEstadia = {
-            idAlumno: new ObjectId(idAlumno),
-            cartaPresentacion: cpa
-        }
-        const estadia = new Estadia(objEstadia);
-        const newEstadia = estadia.save();
-        res.status(201).json(newEstadia);
+        estadia.cartaPresentacion = cpa;
+        const updatedEstadia = estadia.save();
+        res.status(201).json(updatedEstadia);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -369,6 +370,7 @@ router.post('/academico/anteproyecto/asesores', async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
+
 // POST - Asignar asesor
 router.post('/academico/anteproyecto/asesor/asignar', async (req, res) => {
     try {
@@ -376,7 +378,6 @@ router.post('/academico/anteproyecto/asesor/asignar', async (req, res) => {
         const idAlumno = req.body.idAlumno;
 
         const estadia = await Estadia.find({
-            idAsesor: ObjectId(idAsesor),
             idAlumno: ObjectId(idAlumno)
         });
         estadia.idAsesor = ObjectId(idAsesor) || estadia.idAsesor;

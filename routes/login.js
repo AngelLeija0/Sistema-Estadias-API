@@ -8,6 +8,7 @@ const Administrador = require('../models/administrador');
 const Vinculacion = require('../models/vinculador');
 const Asesor = require('../models/asesor');
 const Alumno = require('../models/alumno');
+const Estadia = require('../models/estadia');
 
 // POST - Login
 router.post('/', async (req, res) => {
@@ -27,6 +28,16 @@ router.post('/', async (req, res) => {
             response.nombre = alumno.datosPersonales.nombres.nombre;
             response.apPaterno = alumno.datosPersonales.nombres.apPaterno;
             response.apMaterno = alumno.datosPersonales.nombres.apMaterno;
+
+            // Buscar si un alumno ya esta en estadias
+            const estadia = Estadia.find({
+                idAlumno: new ObjectId(alumno._id)
+            });
+            // Si no existe un alumno en estadia se crea una nueva estadia con ese alumno
+            if (estadia === null || estadia === undefined){
+                estadia.idAlumno = new ObjectId(alumno._id);
+                estadia.save();
+            }
             return res.json(response);
         }
 
