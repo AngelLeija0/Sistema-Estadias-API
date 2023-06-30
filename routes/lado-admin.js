@@ -9,6 +9,7 @@ const ExcelJS = require('exceljs');
 const Estadia = require('../models/estadia');
 const Asesor = require('../models/asesor');
 const Alumno = require('../models/alumno');
+const alumno = require('../models/alumno');
 
 /* Alumnos */
 
@@ -68,6 +69,9 @@ router.post('/alumnos/proceso', async (req, res) => {
                 }
             }
         }
+        if (alumnos.length === 0 || alumnos === null){
+            return res.json("No se encontraron alumnos");
+        }
         res.json(alumnos);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -113,6 +117,9 @@ router.post('/alumnos/proceso/excel', async (req, res) => {
                     alumnos.push(infoAlumno);
                 }
             }
+        }
+        if (alumnos.length === 0 || alumnos === null){
+            return res.json("No se encontraron alumnos");
         }
         const data = alumnos;
         const workbook = new ExcelJS.Workbook();
@@ -209,6 +216,9 @@ router.post('/alumnos/liberados/excel', async (req, res) => {
                 }
             }
         }
+        if (alumnos.length === 0 || alumnos === null){
+            return res.json("No se encontraron alumnos");
+        }
         const data = alumnos;
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Datos');
@@ -301,6 +311,9 @@ router.post('/alumnos/liberados', async (req, res) => {
                 }
             }
         }
+        if (alumnos.length === 0 || alumnos === null){
+            return res.json("No se encontraron alumnos");
+        }
         res.json(alumnos);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -367,6 +380,9 @@ router.post('/alumnos/historial', async (req, res) => {
                 };
                 alumnos.push(infoAlumno);
             }
+        }
+        if (alumnos.length === 0 || alumnos === null){
+            return res.json("No se encontraron alumnos");
         }
         res.json(alumnos);
     } catch (error) {
@@ -437,6 +453,9 @@ router.post('/alumnos/historial/excel', async (req, res) => {
                 };
                 alumnos.push(infoAlumno);
             }
+        }
+        if (alumnos.length === 0 || alumnos === null){
+            return res.json("No se encontraron alumnos");
         }
 
         const data = alumnos;
