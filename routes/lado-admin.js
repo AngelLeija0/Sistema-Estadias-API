@@ -488,6 +488,8 @@ router.post('/alumnos/historial/excel', async (req, res) => {
     }
 });
 
+/* Perfil Alumno */
+
 // POST - Ver perfil alumno
 router.post('/alumno/perfil', async (req, res) => {
     try {
@@ -524,6 +526,89 @@ router.post('/alumno/perfil', async (req, res) => {
         res.json(infoAlumno);
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+});
+
+// PATCH - Modificar carta presentacion
+router.patch('alumno/perfil/cpa/modificar', async (req, res) => {
+    try {
+        const idAlumno = req.body.idAlumno;
+        const filtro = {
+            idAlumno: new ObjectId(idAlumno)
+        }
+        const estadia = await Estadia.findOne(filtro);
+
+        const cpa = req.body;
+        estadia.cartaPresentacion.estado.nombre = cpa.estado.nombre || estadia.cartaPresentacion.estado.nombre;
+        estadia.cartaPresentacion.estado.motivo = cpa.estado.motivo || estadia.cartaPresentacion.estado.motivo;
+        estadia.cartaPresentacion.estado.fecha = cpa.estado.fecha || estadia.cartaPresentacion.estado.fecha;
+
+        const datosAlumno = cpa.datosAlumno;
+        const datosAlumnoAlumno = datosAlumno.datosAlumno;
+
+        const nombres = datosAlumnoAlumno.nombres;
+        estadia.cartaPresentacion.datosAlumno.datosAlumno.nombres.nombre = nombres.nombre || estadia.cartaPresentacion.datosAlumno.datosAlumno.nombres.nombre;
+        estadia.cartaPresentacion.datosAlumno.datosAlumno.nombres.apPaterno = nombres.apPaterno || estadia.cartaPresentacion.datosAlumno.datosAlumno.nombres.apPaterno;
+        estadia.cartaPresentacion.datosAlumno.datosAlumno.nombres.apMaterno = nombres.apMaterno || estadia.cartaPresentacion.datosAlumno.datosAlumno.nombres.apMaterno;
+
+        const privado = datosAlumnoAlumno.privado;
+        estadia.cartaPresentacion.datosAlumno.datosAlumno.privado.matricula = privado.matricula || estadia.cartaPresentacion.datosAlumno.datosAlumno.privado.matricula;
+        estadia.cartaPresentacion.datosAlumno.datosAlumno.privado.email = privado.email || estadia.cartaPresentacion.datosAlumno.datosAlumno.privado.email;
+        estadia.cartaPresentacion.datosAlumno.datosAlumno.privado.password = privado.password || estadia.cartaPresentacion.datosAlumno.datosAlumno.privado.password;
+        estadia.cartaPresentacion.telefonoCelular = datosAlumno.telefonoCelular || estadia.cartaPresentacion.telefonoCelular;
+        estadia.cartaPresentacion.telefonoCasa = datosAlumno.telefonoCasa || estadia.cartaPresentacion.telefonoCasa;
+        estadia.cartaPresentacion.nss = datosAlumno.nss || estadia.cartaPresentacion.nss;
+        estadia.cartaPresentacion.curp = datosAlumno.curp || estadia.cartaPresentacion.curp;
+
+        const datosAcademicos = cpa.datosAcademicos;
+        const datosAcademicosAlumno = cpa.datosAcademicosAlumno;
+        estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.idCarrera = datosAcademicosAlumno.idCarrera || estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.idCarrera;
+        estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grado = datosAcademicosAlumno.grado || estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grado;
+        estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grupo = datosAcademicosAlumno.grupo || estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grupo;
+        estadia.cartaPresentacion.datosAcademicos.periodo = datosAcademicos.periodo || estadia.cartaPresentacion.datosAcademicos.periodo;
+        estadia.cartaPresentacion.datosAcademicos.año = datosAcademicos.año || estadia.cartaPresentacion.datosAcademicos.año;
+
+        const datosEmpresa = cpa.datosEmpresa;
+        estadia.cartaPresentacion.datosEmpresa.nombreEmpresa = datosEmpresa.nombreEmpresa || estadia.cartaPresentacion.datosEmpresa.nombreEmpresa;
+        estadia.cartaPresentacion.datosEmpresa.nombreEmpresario = datosEmpresa.nombreEmpresario || estadia.cartaPresentacion.datosEmpresa.nombreEmpresario;
+        estadia.cartaPresentacion.datosEmpresa.puestoEmpresario = datosEmpresa.puestoEmpresario || estadia.cartaPresentacion.datosEmpresa.puestoEmpresario;
+
+        const updatedEstadia = await estadia.save();
+        res.json(updatedEstadia);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+});
+
+// PATCH - Modificar un anteproyecto
+router.patch('/alumno/perfil/anteproyecto/modificar', async (req, res) => {
+    try {
+        const idAlumno = req.body.idAlumno;
+        const filtro = {
+            idAlumno: new ObjectId(idAlumno)
+        }
+        const estadia = await Estadia.findOne(filtro);
+
+        const anteproyecto = req.body.anteproyecto;
+
+        const datosEmpresa = anteproyecto.datosEmpresa;
+        estadia.anteproyecto.datosEmpresa.emailEmpresario = datosEmpresa.emailEmpresario || estadia.anteproyecto.datosEmpresa.emailEmpresario;
+        estadia.anteproyecto.datosEmpresa.telefonoEmpresario = datosEmpresa.telefonoEmpresario || estadia.anteproyecto.datosEmpresa.telefonoEmpresario;
+
+        const datosProyecto = anteproyecto.datosProyecto;
+        estadia.anteproyecto.datosProyecto.nombre = datosProyecto.nombre || estadia.anteproyecto.datosProyecto.nombre;
+        estadia.anteproyecto.datosProyecto.objetivo = datosProyecto.objetivo || estadia.anteproyecto.datosProyecto.objetivo;
+        estadia.anteproyecto.datosProyecto.descripcion = datosProyecto.descripcion || estadia.anteproyecto.datosProyecto.descripcion;
+
+        estadia.anteproyecto.estado.nombre = anteproyecto.estado.nombre || estadia.anteproyecto.estado.nombre;
+        estadia.anteproyecto.estado.motivo = anteproyecto.estado.motivo || estadia.anteproyecto.estado.motivo;
+        estadia.anteproyecto.estado.fecha = anteproyecto.estado.fecha || estadia.anteproyecto.estado.fecha;
+
+        estadia.anteproyecto.fechaRegistro = anteproyecto.fechaRegistro || estadia.anteproyecto.fechaRegistro;
+        const updatedAnteproyecto = await estadia.save();
+        res.json(updatedAnteproyecto);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
     }
 });
 
