@@ -141,25 +141,27 @@ router.patch('/cpa/modificar', async (req, res) => {
         estadia.cartaPresentacion.estado.fecha = cpa.estado.fecha || estadia.cartaPresentacion.estado.fecha;
 
         const datosAlumno = cpa.datosAlumno;
-        const datosAlumnoAlumno = datosAlumno.datosAlumno;
+        const nombres = datosAlumno.nombres;
+        estadia.cartaPresentacion.datosAlumno.nombres.nombre = nombres.nombre || estadia.cartaPresentacion.datosAlumno.nombres.nombre;
+        estadia.cartaPresentacion.datosAlumno.nombres.apPaterno = nombres.apPaterno || estadia.cartaPresentacion.datosAlumno.nombres.apPaterno;
+        estadia.cartaPresentacion.datosAlumno.nombres.apMaterno = nombres.apMaterno || estadia.cartaPresentacion.datosAlumno.nombres.apMaterno;
 
-        const nombres = datosAlumnoAlumno.nombres;
-        estadia.cartaPresentacion.datosAlumno.datosAlumno.nombres.nombre = nombres.nombre || estadia.cartaPresentacion.datosAlumno.datosAlumno.nombres.nombre;
-        estadia.cartaPresentacion.datosAlumno.datosAlumno.nombres.apPaterno = nombres.apPaterno || estadia.cartaPresentacion.datosAlumno.datosAlumno.nombres.apPaterno;
-        estadia.cartaPresentacion.datosAlumno.datosAlumno.nombres.apMaterno = nombres.apMaterno || estadia.cartaPresentacion.datosAlumno.datosAlumno.nombres.apMaterno;
-
-        const privado = datosAlumnoAlumno.privado;
-        estadia.cartaPresentacion.datosAlumno.datosAlumno.privado.matricula = privado.matricula || estadia.cartaPresentacion.datosAlumno.datosAlumno.privado.matricula;
-        estadia.cartaPresentacion.datosAlumno.datosAlumno.privado.email = privado.email || estadia.cartaPresentacion.datosAlumno.datosAlumno.privado.email;
-        estadia.cartaPresentacion.datosAlumno.datosAlumno.privado.password = privado.password || estadia.cartaPresentacion.datosAlumno.datosAlumno.privado.password;
-        estadia.cartaPresentacion.telefonoCelular = datosAlumno.telefonoCelular || estadia.cartaPresentacion.telefonoCelular;
-        estadia.cartaPresentacion.telefonoCasa = datosAlumno.telefonoCasa || estadia.cartaPresentacion.telefonoCasa;
-        estadia.cartaPresentacion.nss = datosAlumno.nss || estadia.cartaPresentacion.nss;
-        estadia.cartaPresentacion.curp = datosAlumno.curp || estadia.cartaPresentacion.curp;
+        const privado = datosAlumno.privado;
+        estadia.cartaPresentacion.datosAlumno.privado.matricula = privado.matricula || estadia.cartaPresentacion.datosAlumno.privado.matricula;
+        estadia.cartaPresentacion.datosAlumno.privado.email = privado.email || estadia.cartaPresentacion.datosAlumno.privado.email;
+        estadia.cartaPresentacion.datosAlumno.privado.password = privado.password || estadia.cartaPresentacion.datosAlumno.privado.password;
+        estadia.cartaPresentacion.datosAlumno.telefonoCelular = datosAlumno.telefonoCelular || estadia.cartaPresentacion.datosAlumno.telefonoCelular;
+        estadia.cartaPresentacion.datosAlumno.telefonoCasa = datosAlumno.telefonoCasa || estadia.cartaPresentacion.datosAlumno.telefonoCasa;
+        estadia.cartaPresentacion.datosAlumno.nss = datosAlumno.nss || estadia.cartaPresentacion.datosAlumno.nss;
+        estadia.cartaPresentacion.datosAlumno.curp = datosAlumno.curp || estadia.cartaPresentacion.datosAlumno.curp;
 
         const datosAcademicos = cpa.datosAcademicos;
         const datosAcademicosAlumno = cpa.datosAcademicosAlumno;
         estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.idCarrera = datosAcademicosAlumno.idCarrera || estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.idCarrera;
+        estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.nivelAcademico = datosAcademicosAlumno.nivelAcademico || estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.nivelAcademico;
+        estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.turno = datosAcademicosAlumno.turno || estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.turno;
+        estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.carrera = datosAcademicos.carrera || estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.carrera;
+        estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.area = datosAcademicos.area || estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.area;
         estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grado = datosAcademicosAlumno.grado || estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grado;
         estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grupo = datosAcademicosAlumno.grupo || estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grupo;
         estadia.cartaPresentacion.datosAcademicos.periodo = datosAcademicos.periodo || estadia.cartaPresentacion.datosAcademicos.periodo;
