@@ -4,6 +4,7 @@ const { ObjectId } = mongoose.Types;
 const express = require('express');
 const router = express.Router();
 
+const path = require('path');
 const ExcelJS = require('exceljs');
 
 const Estadia = require('../models/estadia');
@@ -608,6 +609,31 @@ router.patch('/alumno/perfil/anteproyecto/modificar', async (req, res) => {
         estadia.anteproyecto.fechaRegistro = anteproyecto.fechaRegistro || estadia.anteproyecto.fechaRegistro;
         const updatedAnteproyecto = await estadia.save();
         res.json(updatedAnteproyecto);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// POST - Ver/descargar documento
+router.post('alumno/perfil/documento/descargar', async (req, res) => {
+    try {
+        const idAlumno = req.body.idAlumno;
+        const nombreDocumento = req.body.nombreDocumento;
+        const pathDocumento = req.body.pathDocumento;
+        const filtro = {
+            idAlumno: new ObjectId(idAlumno)
+        }
+        const estadia = await Estadia.findOne(filtro);
+
+        if (estadia && estadia.documentos) {
+            const documento = estadia.documentos[nombreDocumento];
+            if (documento && documento.path === pathDocumento) {
+                const filePath = path.join(__dirname, '../documents', pathDocumento);
+                return res.sendFile(filePath);
+            }
+        }
+
+        return res.json("No se encontro documento");
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
