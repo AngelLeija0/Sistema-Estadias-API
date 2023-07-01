@@ -492,7 +492,7 @@ router.patch('/academico/anteproyecto/modificar', async (req, res) => {
 });
 
 // POST - Ver informacion y estado de Avance
-router.get('/academico/anteproyecto', async (req, res) => {
+router.get('/academico/avance', async (req, res) => {
     try {
         const idAlumno = req.body.idAlumno;
         const filtro = {
