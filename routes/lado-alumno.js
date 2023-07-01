@@ -4,6 +4,8 @@ const { ObjectId } = mongoose.Types;
 const express = require('express');
 const router = express.Router();
 
+const path = require('path');
+
 const Estadia = require('../models/estadia');
 const Asesor = require('../models/asesor');
 const Alumno = require('../models/alumno');
@@ -180,8 +182,8 @@ router.patch('/cpa/modificar', async (req, res) => {
 
 /* Seguimiento Administrativo */
 
-// POST - Subir documento  y/o actualizar documento
-router.post('/documento/subir', async (req, res) => {
+// POST - Subir documento y/o actualizar documento
+router.post('/documento/subir', upload.single('archivo'), async (req, res) => {
     try {
         const idAlumno = req.body.idAlumno;
         const reqDocumentos = req.body.documentos;
@@ -192,9 +194,16 @@ router.post('/documento/subir', async (req, res) => {
         if (estadia.documentos === null || estadia.documentos === undefined) {
             estadia.documentos = {};
         }
+
+        const archivo = req.file;
+        const archivoNombre = archivo ? archivo.originalname : null;
+
+        const destino = path.join(__dirname, '../documents', archivoNombre);
+        await fs.rename(archivo.path, destino);
+
         Object.keys(reqDocumentos).map((key) => {
             estadia.documentos[key] = {
-                archivo: reqDocumentos[key].archivo || estadia.documentos[key].archivo,
+                archivo: archivoNombre || estadia.documentos[key].archivo,
                 estado: {
                     nombre: reqDocumentos[key].estado.nombre || estadia.documentos[key].estado.nombre,
                     motivo: reqDocumentos[key].estado.motivo || estadia.documentos[key].estado.motivo,
@@ -202,8 +211,35 @@ router.post('/documento/subir', async (req, res) => {
                 }
             }
         });
+
         const updatedDocumento = await estadia.save();
         res.json(updatedDocumento);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// POST - Ver/descargar documento
+router.post('/documento/descargar', async (req, res) => {
+    try {
+        const idAlumno = req.body.idAlumno;
+        const documentos = estadia.documentos;
+        const nombreDocumento = req.body.nombreDocumento;
+        const pathDocumento = req.body.pathDocumento;
+        const filtro = {
+            idAlumno: new ObjectId(idAlumno)
+        }
+        const estadia = await Estadia.findOne(filtro);
+
+        if (estadia && estadia.documentos) {
+            const documento = estadia.documentos[nombreDocumento];
+            if (documento && documento.path === pathDocumento) {
+                const filePath = path.join(__dirname, '../documents', pathDocumento);
+                return res.sendFile(filePath);
+            }
+        }
+
+        return res.json("No se encontro documento");
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
