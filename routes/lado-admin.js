@@ -644,55 +644,36 @@ router.post('alumno/perfil/documento/descargar', async (req, res) => {
 // POST - Busqueda de todos los asesores
 router.post('/asesores', async (req, res) => {
     try {
-        let asesores = [];
         const filtro = req.body.filtro
-        const estadias = await Estadia.find();
-        for (const estadia of estadias) {
-            const idAsesor = estadia._doc.idAsesor;
-            const busqueda = {
-                _id: new ObjectId(idAsesor)
-            };
-            if (filtro.buscador) {
-                const textoBusqueda = filtro.buscador;
-                const regex = new RegExp(textoBusqueda, 'i');
-                busqueda.$or = [
-                    { 'datosPersonales.nombres.nombre': regex },
-                    { 'datosPersonales.nombres.apPaterno': regex },
-                    { 'datosPersonales.nombres.apMaterno': regex }
-                ];
-                const numeroPartes = textoBusqueda.split(" ");
-                if (numeroPartes.length >= 2) {
-                    const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
-                    const apPaterno = numeroPartes[numeroPartes.length - 2];
-                    const apMaterno = numeroPartes[numeroPartes.length - 1];
-                    busqueda.$or.push({ 'datosPersonales.nombres.nombre': nombre });
-                    busqueda.$or.push({ 'datosPersonales.nombres.apPaterno': apPaterno });
-                    busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': apMaterno });
-                }
-            }
-            if (filtro.nivelAcademico) {
-                busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
-            }
-            if (filtro.carrera) {
-                busqueda["datosAcademicos.carrera"] = filtro.carrera;
-            }
-            if (filtro.area) {
-                busqueda["datosAcademicos.area"] = filtro.area;
-            }
-            const asesor = await Asesor.findOne(busqueda);
-            if (asesor) {
-                const infoAsesor = {
-                    idAsesor: idAsesor,
-                    nombre: asesor.datosPersonales.nombres.nombre,
-                    apPaterno: asesor.datosPersonales.nombres.apPaterno,
-                    apMaterno: asesor.datosPersonales.nombres.apMaterno,
-                    nivelAcademico: asesor.datosAcademicos.nivelAcademico,
-                    carrera: asesor.datosAcademicos.carrera,
-                    area: asesor.datosAcademicos.area
-                };
-                asesores.push(infoAsesor);
+        const busqueda = {};
+        if (filtro.buscador) {
+            const textoBusqueda = filtro.buscador;
+            const regex = new RegExp(textoBusqueda, 'i');
+            busqueda.$or = [
+                { 'datosPersonales.nombres.nombre': regex },
+                { 'datosPersonales.nombres.apPaterno': regex },
+                { 'datosPersonales.nombres.apMaterno': regex }
+            ];
+            const numeroPartes = textoBusqueda.split(" ");
+            if (numeroPartes.length >= 2) {
+                const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
+                const apPaterno = numeroPartes[numeroPartes.length - 2];
+                const apMaterno = numeroPartes[numeroPartes.length - 1];
+                busqueda.$or.push({ 'datosPersonales.nombres.nombre': nombre });
+                busqueda.$or.push({ 'datosPersonales.nombres.apPaterno': apPaterno });
+                busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': apMaterno });
             }
         }
+        if (filtro.nivelAcademico) {
+            busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
+        }
+        if (filtro.carrera) {
+            busqueda["datosAcademicos.carrera"] = filtro.carrera;
+        }
+        if (filtro.area) {
+            busqueda["datosAcademicos.area"] = filtro.area;
+        }
+        const asesores = await Asesor.find(busqueda);
         res.json(asesores);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -807,7 +788,7 @@ router.post('/asesores/crear', async (req, res) => {
 });
 
 // POST - Perfil de asesor (informacion general)
-router.post('/asesor', async (req, res) => {
+router.post('/asesor/perfil', async (req, res) => {
     try {
         const idAsesor = req.body.asesor;
         const asesor = await Asesor.findById(idAsesor);
@@ -818,7 +799,7 @@ router.post('/asesor', async (req, res) => {
 });
 
 // POST - Perfil asesor, alumnos asesorados
-router.post('/asesor/alumnos', async (req, res) => {
+router.post('/asesor/perfil/alumnos', async (req, res) => {
     try {
         const idAsesor = req.body.idAsesor;
         let alumnos = [];
@@ -852,7 +833,7 @@ router.post('/asesor/alumnos', async (req, res) => {
 });
 
 // POST - Perfil asesor, agregar alumno para asesorar
-router.post('/asesor/alumno/buscar', async (req, res) => {
+router.post('/asesor/perfil/alumno/buscar', async (req, res) => {
     try {
         const idAlumno = req.body.idAlumno;
 
@@ -881,7 +862,7 @@ router.post('/asesor/alumno/buscar', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-router.patch('/asesor/alumno/asignar', async (req, res) => {
+router.patch('/asesor/perfil/alumno/asignar', async (req, res) => {
     try {
         const idAsesor = req.body.idAsesor;
         const idAlumno = req.body.idAlumno;
