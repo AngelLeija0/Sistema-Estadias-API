@@ -678,8 +678,6 @@ router.post('/asesores', async (req, res) => {
         const asesores = await Asesor.find(busqueda);
         let arrAsesores = [];
         for (const asesor of asesores) {
-            console.log(asesor);
-            console.log(aseosr._id);
             const infoAsesor = {
                 idAsesor: asesor._id,
                 nombre: asesor.datosPersonales.nombres.nombre,
