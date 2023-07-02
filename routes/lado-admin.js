@@ -644,7 +644,7 @@ router.post('alumno/perfil/documento/descargar', async (req, res) => {
 // POST - Busqueda de todos los asesores
 router.post('/asesores', async (req, res) => {
     try {
-        const filtro = req.body.filtro
+        const filtro = req.body.filtro;
         const busqueda = {};
         if (filtro.buscador) {
             const textoBusqueda = filtro.buscador;
