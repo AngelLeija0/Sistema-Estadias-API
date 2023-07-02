@@ -666,9 +666,6 @@ router.post('/asesores', async (req, res) => {
                 busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': apMaterno });
             }
         }
-        if (filtro.nivelAcademico) {
-            busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
-        }
         if (filtro.carrera) {
             busqueda["datosAcademicos.carrera"] = filtro.carrera;
         }
@@ -683,6 +680,7 @@ router.post('/asesores', async (req, res) => {
                 nombre: asesor.datosPersonales.nombres.nombre,
                 apPaterno: asesor.datosPersonales.nombres.apPaterno,
                 apMaterno: asesor.datosPersonales.nombres.apMaterno,
+                carrera: asesor.datosAcademicos.carrera,
                 email: asesor.datosPersonales.privado.email,
                 password: asesor.datosPersonales.privado.password,
                 username: asesor.datosPersonales.privado.username,
