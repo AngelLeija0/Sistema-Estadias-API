@@ -734,7 +734,7 @@ router.post('/asesores/excel', async (req, res) => {
         let arrAsesores = [];
         for (const asesor of asesores) {
             const infoAsesor = {
-                idAsesor: asesor.id,
+                idAsesor: asesor._id,
                 nombre: asesor.datosPersonales.nombres.nombre,
                 apPaterno: asesor.datosPersonales.nombres.apPaterno,
                 apMaterno: asesor.datosPersonales.nombres.apMaterno,
