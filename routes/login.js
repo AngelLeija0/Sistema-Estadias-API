@@ -4,6 +4,8 @@ const { ObjectId } = mongoose.Types;
 const express = require('express');
 const router = express.Router();
 
+const bcrypt = require('bcrypt');
+
 const Administrador = require('../models/administrador');
 const Vinculacion = require('../models/vinculador');
 const Asesor = require('../models/asesor');
@@ -22,7 +24,7 @@ router.post('/', async (req, res) => {
             "datosPersonales.privado.matricula": usuario,
             "datosPersonales.privado.password": password
         });
-        if(alumno !== null && alumno !== undefined){
+        if (alumno !== null && alumno !== undefined) {
             response.tipoUsuario = "alumno";
             response.id = alumno._id;
             response.nombre = alumno.datosPersonales.nombres.nombre;
@@ -34,7 +36,7 @@ router.post('/', async (req, res) => {
                 idAlumno: new ObjectId(alumno._id)
             });
             // Si no existe un alumno en estadia se crea una nueva estadia con ese alumno
-            if (estadia === null || estadia === undefined){
+            if (estadia === null || estadia === undefined) {
                 estadia.idAlumno = new ObjectId(alumno._id);
                 estadia.save();
             }
@@ -45,20 +47,29 @@ router.post('/', async (req, res) => {
             "datosPersonales.privado.username": usuario,
             "datosPersonales.privado.password": password
         });
-        if(asesor !== null && asesor !== undefined){
-            response.tipoUsuario = "asesor";
-            response.id = asesor._id;
-            response.nombre = asesor.datosPersonales.nombres.nombre;
-            response.apPaterno = asesor.datosPersonales.nombres.apPaterno;
-            response.apMaterno = asesor.datosPersonales.nombres.apMaterno;
-            return res.json(response);
+        if (asesor !== null && asesor !== undefined) {
+            bcrypt.compare(password, asesor.datosPersonales.privado.password, (err, isMatch) => {
+                if (err) {
+                    throw new Error('Error al comparar las contraseñas');
+                }
+                if (isMatch) {
+                    response.tipoUsuario = "asesor";
+                    response.id = asesor._id;
+                    response.nombre = asesor.datosPersonales.nombres.nombre;
+                    response.apPaterno = asesor.datosPersonales.nombres.apPaterno;
+                    response.apMaterno = asesor.datosPersonales.nombres.apMaterno;
+                    return res.json(response);
+                } else {
+                    res.status(401).json("Contraseña incorrecta");
+                }
+            });
         }
 
         const admin = await Administrador.findOne({
             "datosPersonales.privado.username": usuario,
             "datosPersonales.privado.password": password
         });
-        if(admin !== null && admin !== undefined){
+        if (admin !== null && admin !== undefined) {
             response.tipoUsuario = "administrador";
             response.id = admin._id;
             response.nombre = admin.datosPersonales.nombres.nombre;
@@ -71,7 +82,7 @@ router.post('/', async (req, res) => {
             "datosPersonales.privado.username": usuario,
             "datosPersonales.privado.password": password
         });
-        if(vinculacion !== null && vinculacion !== undefined){
+        if (vinculacion !== null && vinculacion !== undefined) {
             response.tipoUsuario = "vinculacion";
             response.id = vinculacion._id;
             response.nombre = vinculacion.datosPersonales.nombres.nombre;

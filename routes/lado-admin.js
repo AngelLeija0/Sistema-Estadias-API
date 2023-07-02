@@ -5,12 +5,14 @@ const express = require('express');
 const router = express.Router();
 
 const path = require('path');
+
 const ExcelJS = require('exceljs');
+
+const bcrypt = require('bcrypt');
 
 const Estadia = require('../models/estadia');
 const Asesor = require('../models/asesor');
 const Alumno = require('../models/alumno');
-const alumno = require('../models/alumno');
 
 /* Alumnos */
 
@@ -70,7 +72,7 @@ router.post('/alumnos/proceso', async (req, res) => {
                 }
             }
         }
-        if (alumnos.length === 0 || alumnos === null){
+        if (alumnos.length === 0 || alumnos === null) {
             return res.json("No se encontraron alumnos");
         }
         res.json(alumnos);
@@ -119,7 +121,7 @@ router.post('/alumnos/proceso/excel', async (req, res) => {
                 }
             }
         }
-        if (alumnos.length === 0 || alumnos === null){
+        if (alumnos.length === 0 || alumnos === null) {
             return res.json("No se encontraron alumnos");
         }
         const data = alumnos;
@@ -157,7 +159,7 @@ router.post('/alumnos/liberados/excel', async (req, res) => {
         let alumnos = [];
         const filtro = req.body.filtro
         const busqueda = {}
-        if (filtro.buscador){
+        if (filtro.buscador) {
             return res.status(500).json({ message: "No se puede generar un archivo de Excel para un solo alumno." });
         }
         if (filtro.año) {
@@ -217,7 +219,7 @@ router.post('/alumnos/liberados/excel', async (req, res) => {
                 }
             }
         }
-        if (alumnos.length === 0 || alumnos === null){
+        if (alumnos.length === 0 || alumnos === null) {
             return res.json("No se encontraron alumnos");
         }
         const data = alumnos;
@@ -312,7 +314,7 @@ router.post('/alumnos/liberados', async (req, res) => {
                 }
             }
         }
-        if (alumnos.length === 0 || alumnos === null){
+        if (alumnos.length === 0 || alumnos === null) {
             return res.json("No se encontraron alumnos");
         }
         res.json(alumnos);
@@ -382,7 +384,7 @@ router.post('/alumnos/historial', async (req, res) => {
                 alumnos.push(infoAlumno);
             }
         }
-        if (alumnos.length === 0 || alumnos === null){
+        if (alumnos.length === 0 || alumnos === null) {
             return res.json("No se encontraron alumnos");
         }
         res.json(alumnos);
@@ -397,7 +399,7 @@ router.post('/alumnos/historial/excel', async (req, res) => {
         let alumnos = [];
         const filtro = req.body.filtro;
         const busqueda = {}
-        if (filtro.buscador){
+        if (filtro.buscador) {
             return res.status(500).json({ message: "No se puede generar un archivo de Excel para un solo alumno." });
         }
         if (filtro.año) {
@@ -455,7 +457,7 @@ router.post('/alumnos/historial/excel', async (req, res) => {
                 alumnos.push(infoAlumno);
             }
         }
-        if (alumnos.length === 0 || alumnos === null){
+        if (alumnos.length === 0 || alumnos === null) {
             return res.json("No se encontraron alumnos");
         }
 
@@ -483,7 +485,7 @@ router.post('/alumnos/historial/excel', async (req, res) => {
         return workbook.xlsx.write(res).then(() => {
             res.status(200).end();
         });
-        
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -674,7 +676,20 @@ router.post('/asesores', async (req, res) => {
             busqueda["datosAcademicos.area"] = filtro.area;
         }
         const asesores = await Asesor.find(busqueda);
-        res.json(asesores);
+        let arrAsesores = [];
+        for (const asesor of asesores) {
+            const infoAsesor = {
+                idAsesor: asesor.idAsesor,
+                nombre: asesor.datosPersonales.nombres.nombre,
+                apPaterno: asesor.datosPersonales.nombres.apPaterno,
+                apMaterno: asesor.datosPersonales.nombres.apMaterno,
+                email: asesor.datosPersonales.privado.email,
+                password: asesor.datosPersonales.privado.password,
+                username: asesor.datosPersonales.privado.username,
+            }
+            arrAsesores.push(infoAsesor);
+        }
+        res.json(arrAsesores);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -683,58 +698,53 @@ router.post('/asesores', async (req, res) => {
 // POST - Busqueda de todos los asesores
 router.post('/asesores/excel', async (req, res) => {
     try {
-        let asesores = [];
         const filtro = req.body.filtro;
         if (filtro.buscador) {
             return res.status(500).json({ message: "No se puede generar un archivo de Excel para un solo alumno." });
         }
-        const estadias = await Estadia.find();
-        for (const estadia of estadias) {
-            const idAsesor = estadia._doc.idAsesor;
-            const busqueda = {
-                _id: new ObjectId(idAsesor)
-            };
-            if (filtro.buscador) {
-                const textoBusqueda = filtro.buscador;
-                const regex = new RegExp(textoBusqueda, 'i');
-                busqueda.$or = [
-                    { 'datosPersonales.nombres.nombre': regex },
-                    { 'datosPersonales.nombres.apPaterno': regex },
-                    { 'datosPersonales.nombres.apMaterno': regex }
-                ];
-                const numeroPartes = textoBusqueda.split(" ");
-                if (numeroPartes.length >= 2) {
-                    const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
-                    const apPaterno = numeroPartes[numeroPartes.length - 2];
-                    const apMaterno = numeroPartes[numeroPartes.length - 1];
-                    busqueda.$or.push({ 'datosPersonales.nombres.nombre': nombre });
-                    busqueda.$or.push({ 'datosPersonales.nombres.apPaterno': apPaterno });
-                    busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': apMaterno });
-                }
-            }
-            if (filtro.nivelAcademico) {
-                busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
-            }
-            if (filtro.carrera) {
-                busqueda["datosAcademicos.carrera"] = filtro.carrera;
-            }
-            if (filtro.area) {
-                busqueda["datosAcademicos.area"] = filtro.area;
-            }
-            const asesor = await Asesor.findOne(busqueda);
-            if (asesor) {
-                const infoAsesor = {
-                    idAsesor: idAsesor,
-                    nombre: asesor.datosPersonales.nombres.nombre,
-                    apPaterno: asesor.datosPersonales.nombres.apPaterno,
-                    apMaterno: asesor.datosPersonales.nombres.apMaterno,
-                    nivelAcademico: asesor.datosAcademicos.nivelAcademico,
-                    carrera: asesor.datosAcademicos.carrera,
-                    area: asesor.datosAcademicos.area
-                };
-                asesores.push(infoAsesor);
+        const busqueda = {};
+        if (filtro.buscador) {
+            const textoBusqueda = filtro.buscador;
+            const regex = new RegExp(textoBusqueda, 'i');
+            busqueda.$or = [
+                { 'datosPersonales.nombres.nombre': regex },
+                { 'datosPersonales.nombres.apPaterno': regex },
+                { 'datosPersonales.nombres.apMaterno': regex }
+            ];
+            const numeroPartes = textoBusqueda.split(" ");
+            if (numeroPartes.length >= 2) {
+                const nombre = numeroPartes.slice(0, numeroPartes.length - 2).join(" ");
+                const apPaterno = numeroPartes[numeroPartes.length - 2];
+                const apMaterno = numeroPartes[numeroPartes.length - 1];
+                busqueda.$or.push({ 'datosPersonales.nombres.nombre': nombre });
+                busqueda.$or.push({ 'datosPersonales.nombres.apPaterno': apPaterno });
+                busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': apMaterno });
             }
         }
+        if (filtro.nivelAcademico) {
+            busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
+        }
+        if (filtro.carrera) {
+            busqueda["datosAcademicos.carrera"] = filtro.carrera;
+        }
+        if (filtro.area) {
+            busqueda["datosAcademicos.area"] = filtro.area;
+        }
+        const asesores = await Asesor.find(busqueda);
+        let arrAsesores = [];
+        for (const asesor of asesores) {
+            const infoAsesor = {
+                idAsesor: asesor.idAsesor,
+                nombre: asesor.datosPersonales.nombres.nombre,
+                apPaterno: asesor.datosPersonales.nombres.apPaterno,
+                apMaterno: asesor.datosPersonales.nombres.apMaterno,
+                email: asesor.datosPersonales.privado.email,
+                password: asesor.datosPersonales.privado.password,
+                username: asesor.datosPersonales.privado.username,
+            }
+            arrAsesores.push(infoAsesor);
+        }
+
         const data = asesores;
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Datos');
@@ -764,28 +774,39 @@ router.post('/asesores/excel', async (req, res) => {
 // POST - Crear nuevo asesor
 router.post('/asesores/crear', async (req, res) => {
     try {
-        const asesor = new Asesor({
-            datosPersonales: {
-                nombres: {
-                    nombre: req.body.datosPersonales.nombres.nombre,
-                    apPaterno: req.body.datosPersonales.nombres.apPaterno,
-                    apMaterno: req.body.datosPersonales.nombres.apMaterno
+        const password = req.body.datosPersonales.privado.password;
+
+        // Genera un hash de la contraseña
+        bcrypt.hash(password, 10, async (err, hash) => {
+            if (err) {
+                throw new Error('Error al generar el hash de la contraseña');
+            }
+
+            const asesor = new Asesor({
+                datosPersonales: {
+                    nombres: {
+                        nombre: req.body.datosPersonales.nombres.nombre,
+                        apPaterno: req.body.datosPersonales.nombres.apPaterno,
+                        apMaterno: req.body.datosPersonales.nombres.apMaterno
+                    },
+                    privado: {
+                        email: req.body.datosPersonales.privado.email,
+                        telefono: req.body.datosPersonales.privado.telefono,
+                        username: req.body.datosPersonales.privado.username,
+                        password: hash
+                    }
                 },
-                privado: {
-                    email: req.body.datosPersonales.privado.email,
-                    telefono: req.body.datosPersonales.privado.telefono,
-                    username: req.body.datosPersonales.privado.username,
-                    password: req.body.datosPersonales.privado.password
-                },
-            },
-            fechaRegistro: new Date(req.body.fechaRegistro)
+                fechaRegistro: new Date(req.body.fechaRegistro)
+            });
+
+            const newAsesor = await asesor.save();
+            res.status(201).json(newAsesor);
         });
-        const newAsesor = await asesor.save();
-        res.status(201).json(newAsesor);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 });
+
 
 // POST - Perfil de asesor (informacion general)
 router.post('/asesor/perfil', async (req, res) => {
