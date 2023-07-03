@@ -767,7 +767,9 @@ router.post('/asesores/excel', async (req, res) => {
 // POST - Crear nuevo asesor
 router.post('/asesores/crear', async (req, res) => {
     try {
+        console.log(req.body);
         const password = req.body.datosPersonales.privado.password;
+        console.log("Passowrd: " + password);
 
         // Genera un hash de la contraseña
         bcrypt.hash(password, 10, async (err, hash) => {
