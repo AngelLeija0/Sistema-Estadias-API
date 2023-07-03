@@ -767,11 +767,8 @@ router.post('/asesores/excel', async (req, res) => {
 // POST - Crear nuevo asesor
 router.post('/asesores/crear', async (req, res) => {
     try {
-        console.log(req.body);
-        const password = req.body.datosPersonales.privado.password;
-        console.log("Passowrd: " + password);
+        const password = req.body.asesor.datosPersonales.privado.password;
 
-        // Genera un hash de la contraseña
         bcrypt.hash(password, 10, async (err, hash) => {
             if (err) {
                 throw new Error('Error al generar el hash de la contraseña');
@@ -780,21 +777,21 @@ router.post('/asesores/crear', async (req, res) => {
             const asesor = new Asesor({
                 datosPersonales: {
                     nombres: {
-                        nombre: req.body.datosPersonales.nombres.nombre,
-                        apPaterno: req.body.datosPersonales.nombres.apPaterno,
-                        apMaterno: req.body.datosPersonales.nombres.apMaterno
+                        nombre: req.body.asesor.datosPersonales.nombres.nombre,
+                        apPaterno: req.body.asesor.datosPersonales.nombres.apPaterno,
+                        apMaterno: req.body.asesor.datosPersonales.nombres.apMaterno
                     },
                     privado: {
-                        email: req.body.datosPersonales.privado.email,
-                        telefono: req.body.datosPersonales.privado.telefono,
-                        username: req.body.datosPersonales.privado.username,
+                        email: req.body.asesor.datosPersonales.privado.email,
+                        telefono: req.body.asesor.datosPersonales.privado.telefono,
+                        username: req.body.asesor.datosPersonales.privado.username,
                         password: hash
                     }
                 },
                 datosAcademicos: {
-                    carrera: req.body.datosAcademicos.carrera
+                    carrera: req.body.asesor.datosAcademicos.carrera
                 },
-                fechaRegistro: new Date(req.body.fechaRegistro)
+                fechaRegistro: new Date(req.body.asesor.fechaRegistro)
             });
 
             const newAsesor = await asesor.save();
