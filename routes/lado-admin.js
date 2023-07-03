@@ -697,9 +697,6 @@ router.post('/asesores', async (req, res) => {
 router.post('/asesores/excel', async (req, res) => {
     try {
         const filtro = req.body.filtro;
-        if (filtro.buscador) {
-            return res.status(500).json({ message: "No se puede generar un archivo de Excel para un solo alumno." });
-        }
         const busqueda = {};
         if (filtro.buscador) {
             const textoBusqueda = filtro.buscador;
@@ -719,9 +716,6 @@ router.post('/asesores/excel', async (req, res) => {
                 busqueda.$or.push({ 'datosPersonales.nombres.apMaterno': apMaterno });
             }
         }
-        if (filtro.nivelAcademico) {
-            busqueda["datosAcademicos.nivelAcademico"] = filtro.nivelAcademico;
-        }
         if (filtro.carrera) {
             busqueda["datosAcademicos.carrera"] = filtro.carrera;
         }
@@ -736,6 +730,7 @@ router.post('/asesores/excel', async (req, res) => {
                 nombre: asesor.datosPersonales.nombres.nombre,
                 apPaterno: asesor.datosPersonales.nombres.apPaterno,
                 apMaterno: asesor.datosPersonales.nombres.apMaterno,
+                carrera: asesor.datosAcademicos.carrera,
                 email: asesor.datosPersonales.privado.email,
                 password: asesor.datosPersonales.privado.password,
                 username: asesor.datosPersonales.privado.username,
@@ -743,7 +738,7 @@ router.post('/asesores/excel', async (req, res) => {
             arrAsesores.push(infoAsesor);
         }
 
-        const data = asesores;
+        const data = arrAsesores;
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Datos');
 
@@ -793,6 +788,9 @@ router.post('/asesores/crear', async (req, res) => {
                         username: req.body.datosPersonales.privado.username,
                         password: hash
                     }
+                },
+                datosAcademicos: {
+                    carrera: req.body.datosAcademicos.carrera
                 },
                 fechaRegistro: new Date(req.body.fechaRegistro)
             });
