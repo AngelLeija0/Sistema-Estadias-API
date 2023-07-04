@@ -11,7 +11,7 @@ const asesorSchema = new mongoose.Schema(
       },
       privado: {
         email: String,
-        telfono: String,
+        telefono: String,
         username: String,
         password: String
       }
