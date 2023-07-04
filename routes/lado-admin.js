@@ -802,20 +802,6 @@ router.post('/asesores/crear', async (req, res) => {
     }
 });
 
-// DELETE - Borrar asesor
-router.post('/asesores/borrar', async (req, res) => {
-    try {
-        const idAsesor = req.body.asesor;
-        const asesor = await Asesor.findByIdAndDelete(idAsesor);
-        if (asesor){
-            return res.status(202).json("Asesor eliminado correctamente");
-        }
-        res.status(204).json();
-    } catch (error) {
-        res.status(204).json({ message: error.message });
-    }
-});
-
 // POST - Perfil de asesor (informacion general)
 router.post('/asesor/perfil', async (req, res) => {
     try {
@@ -826,6 +812,64 @@ router.post('/asesor/perfil', async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
+
+router.patch('/asesor/perfil/modificar', async (req, res) => {
+    try {
+        const idAsesor = req.body.asesor;
+        const asesor = await Asesor.findById(idAsesor);
+
+        const newPassword = req.body.asesor.datosPersonales.privado.password;
+        const currentPassword = asesor.datosPersonales.privado.password;
+
+        if (newPassword && newPassword !== currentPassword) {
+            bcrypt.hash(newPassword, 10, async (err, hash) => {
+                if (err) {
+                    throw new Error('Error al generar el hash de la contraseña');
+                }
+                asesor.datosPersonales.privado.password = hash;
+                await saveAsesor(asesor, res);
+            });
+        } else {
+            await saveAsesor(asesor, res);
+        }
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+async function saveAsesor(asesor, res) {
+    try {
+        asesor.datosPersonales.nombres.nombre = req.body.asesor.datosPersonales.nombres.nombre || asesor.datosPersonales.nombres.nombre;
+        asesor.datosPersonales.nombres.apPaterno = req.body.asesor.datosPersonales.nombres.apPaterno || asesor.datosPersonales.nombres.apPaterno;
+        asesor.datosPersonales.nombres.apMaterno = req.body.asesor.datosPersonales.nombres.apMaterno || asesor.datosPersonales.nombres.apMaterno;
+
+        asesor.datosPersonales.privado.email = req.body.asesor.datosPersonales.privado.email || asesor.datosPersonales.privado.email;
+        asesor.datosPersonales.privado.telefono = req.body.asesor.datosPersonales.privado.telefono || asesor.datosPersonales.privado.telefono;
+        asesor.datosPersonales.privado.username = req.body.asesor.datosPersonales.privado.username || asesor.datosPersonales.privado.username;
+
+        asesor.datosAcademicos.carrera = req.body.asesor.datosAcademicos.carrera || asesor.datosAcademicos.carrera;
+
+        const newAsesor = await asesor.save();
+        res.status(201).json(newAsesor);
+    } catch (error) {
+        throw new Error('Error al guardar el asesor');
+    }
+}
+
+// DELETE - Borrar asesor
+router.post('/asesor/perfil/borrar', async (req, res) => {
+    try {
+        const idAsesor = req.body.asesor;
+        const asesor = await Asesor.findByIdAndDelete(idAsesor);
+        if (asesor) {
+            return res.status(202).json("Asesor eliminado correctamente");
+        }
+        res.status(204).json();
+    } catch (error) {
+        res.status(204).json({ message: error.message });
+    }
+});
+
 
 // POST - Perfil asesor, alumnos asesorados
 router.post('/asesor/perfil/alumnos', async (req, res) => {
