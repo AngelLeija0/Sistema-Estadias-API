@@ -95,41 +95,41 @@ router.post('/cpa/crear', async (req, res) => {
 
         const cpa = {
             estado: {
-                nombre: req.body.estado.nombre,
+                nombre: req.body.cartaPresentacion.estado.nombre,
                 motivo: req.body.estado.motivo,
                 fecha: new Date(req.body.estado.fecha)
             },
             datosAlumno: {
                 nombres: {
-                    nombre: req.body.datosAlumno.nombres.nombre,
-                    apPaterno: req.body.datosAlumno.nombres.apMaterno,
-                    apMaterno: req.body.datosAlumno.nombres.apMaterno
+                    nombre: req.body.cartaPresentacion.datosAlumno.nombres.nombre,
+                    apPaterno: req.body.cartaPresentacion.datosAlumno.nombres.apMaterno,
+                    apMaterno: req.body.cartaPresentacion.datosAlumno.nombres.apMaterno
                 },
                 privado: {
-                    matricula: req.body.datosAlumno.privado.matricula,
-                    email: req.body.datosAlumno.privado.email
+                    matricula: req.body.cartaPresentacion.datosAlumno.privado.matricula,
+                    email: req.body.cartaPresentacion.datosAlumno.privado.email
                 },
-                telfonoCelular: req.body.datosAlumno.telfonoCelular,
-                telfonoCasa: req.body.datosAlumno.telfonoCasa,
-                nss: req.body.datosAlumno.nss,
-                curp: req.body.datosAlumno.curp
+                telfonoCelular: req.body.cartaPresentacion.datosAlumno.telfonoCelular,
+                telfonoCasa: req.body.cartaPresentacion.datosAlumno.telfonoCasa,
+                nss: req.body.cartaPresentacion.datosAlumno.nss,
+                curp: req.body.cartaPresentacion.datosAlumno.curp
             },
             datosAcademicos: {
                 datosAcademicosAlumno: {
-                    nivelAcademico: req.body.datosAcademicos.nivelAcademico,
-                    turno: req.body.datosAcademicos.turno,
-                    carrera: req.body.datosAcademicos.carrera,
-                    area: req.body.datosAcademicos.area,
-                    grado: req.body.datosAcademicos.grado,
-                    grupo: req.body.datosAcademicos.grupo
+                    nivelAcademico: req.body.cartaPresentacion.datosAcademicos.nivelAcademico,
+                    turno: req.body.cartaPresentacion.datosAcademicos.turno,
+                    carrera: req.body.cartaPresentacion.datosAcademicos.carrera,
+                    area: req.body.cartaPresentacion.datosAcademicos.area,
+                    grado: req.body.cartaPresentacion.datosAcademicos.grado,
+                    grupo: req.body.cartaPresentacion.datosAcademicos.grupo
                 },
-                perido: req.body.datosAcademicos.perido,
-                año: req.body.datosAcademicos.año
+                perido: req.body.cartaPresentacion.datosAcademicos.perido,
+                año: req.body.cartaPresentacion.datosAcademicos.año
             },
             datosEmpresa: {
-                nombreEmpresa: req.body.datosEmpresa.nombreEmpresa,
-                nombreEmpresario: req.body.datosEmpresa.nombreEmpresario,
-                puestoEmpresario: req.body.datosEmpresa.puestoEmpresario
+                nombreEmpresa: req.body.cartaPresentacion.datosEmpresa.nombreEmpresa,
+                nombreEmpresario: req.body.cartaPresentacion.datosEmpresa.nombreEmpresario,
+                puestoEmpresario: req.body.cartaPresentacion.datosEmpresa.puestoEmpresario
             },
             fechaRegistro: new Date(req.body.fechaRegistro)
         }
