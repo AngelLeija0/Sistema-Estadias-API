@@ -802,6 +802,19 @@ router.post('/asesores/crear', async (req, res) => {
     }
 });
 
+// DELETE - Borrar asesor
+router.post('/asesores/borrar', async (req, res) => {
+    try {
+        const idAsesor = req.body.asesor;
+        const asesor = await Asesor.findByIdAndDelete(idAsesor);
+        if (asesor){
+            return res.status(202).json("Asesor eliminado correctamente");
+        }
+        res.status(204).json();
+    } catch (error) {
+        res.status(204).json({ message: error.message });
+    }
+});
 
 // POST - Perfil de asesor (informacion general)
 router.post('/asesor/perfil', async (req, res) => {
