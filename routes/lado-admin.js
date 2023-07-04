@@ -815,7 +815,7 @@ router.post('/asesor/perfil', async (req, res) => {
 
 router.patch('/asesor/perfil/modificar', async (req, res) => {
     try {
-        const idAsesor = req.body.asesor;
+        const idAsesor = req.body.asesor.idAsesor;
         const asesor = await Asesor.findById(idAsesor);
 
         const newPassword = req.body.asesor.datosPersonales.privado.password;
