@@ -44,9 +44,10 @@ router.post('/', async (req, res) => {
         }
 
         const asesor = await Asesor.findOne({
-            "datosPersonales.privado.username": usuario,
-            "datosPersonales.privado.password": password
+            "datosPersonales.privado.username": usuario
         });
+        console.log(usuario);
+        console.log(asesor);
         if (asesor !== null && asesor !== undefined) {
             bcrypt.compare(password, asesor.datosPersonales.privado.password, (err, isMatch) => {
                 if (err) {
