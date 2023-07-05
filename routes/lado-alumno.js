@@ -33,10 +33,7 @@ router.post('/cpa', async (req, res) => {
             idAlumno: new ObjectId(idAlumno)
         }
         const estadia = await Estadia.findOne(filtro);
-        console.log(req.body.idAlumno);
-        console.log(estadia);
-        console.log(estadia.cartaPresentacion);
-        console.log(Object.keys(estadia.cartaPresentacion).length);
+        
         if (estadia.cartaPresentacion !== null && estadia.cartaPresentacion !== undefined) {
             const infoCPA = {
                 estado: {
