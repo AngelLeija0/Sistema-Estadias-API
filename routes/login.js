@@ -46,10 +46,10 @@ router.post('/', async (req, res) => {
         const asesor = await Asesor.findOne({
             "datosPersonales.privado.username": usuario
         });
-        console.log(usuario);
-        console.log(asesor);
         if (asesor !== null && asesor !== undefined) {
+            console.log("Entra al if");
             bcrypt.compare(password, asesor.datosPersonales.privado.password, (err, isMatch) => {
+                console.log("Comparando password")
                 if (err) {
                     throw new Error('Error al comparar las contraseñas');
                 }
