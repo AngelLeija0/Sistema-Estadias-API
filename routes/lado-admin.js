@@ -827,27 +827,27 @@ router.patch('/asesor/perfil/modificar', async (req, res) => {
                     throw new Error('Error al generar el hash de la contraseña');
                 }
                 asesor.datosPersonales.privado.password = hash;
-                await saveAsesor(asesor, res);
+                await saveAsesor(asesor, res, body);
             });
         } else {
-            await saveAsesor(asesor, res);
+            await saveAsesor(asesor, res, body);
         }
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 });
 
-async function saveAsesor(asesor, res) {
+async function saveAsesor(asesor, res, body) {
     try {
-        asesor.datosPersonales.nombres.nombre = req.body.asesor.datosPersonales.nombres.nombre || asesor.datosPersonales.nombres.nombre;
-        asesor.datosPersonales.nombres.apPaterno = req.body.asesor.datosPersonales.nombres.apPaterno || asesor.datosPersonales.nombres.apPaterno;
-        asesor.datosPersonales.nombres.apMaterno = req.body.asesor.datosPersonales.nombres.apMaterno || asesor.datosPersonales.nombres.apMaterno;
+        asesor.datosPersonales.nombres.nombre = body.asesor.datosPersonales.nombres.nombre || asesor.datosPersonales.nombres.nombre;
+        asesor.datosPersonales.nombres.apPaterno = body.asesor.datosPersonales.nombres.apPaterno || asesor.datosPersonales.nombres.apPaterno;
+        asesor.datosPersonales.nombres.apMaterno = body.asesor.datosPersonales.nombres.apMaterno || asesor.datosPersonales.nombres.apMaterno;
 
-        asesor.datosPersonales.privado.email = req.body.asesor.datosPersonales.privado.email || asesor.datosPersonales.privado.email;
-        asesor.datosPersonales.privado.telefono = req.body.asesor.datosPersonales.privado.telefono || asesor.datosPersonales.privado.telefono;
-        asesor.datosPersonales.privado.username = req.body.asesor.datosPersonales.privado.username || asesor.datosPersonales.privado.username;
+        asesor.datosPersonales.privado.email = body.asesor.datosPersonales.privado.email || asesor.datosPersonales.privado.email;
+        asesor.datosPersonales.privado.telefono = body.asesor.datosPersonales.privado.telefono || asesor.datosPersonales.privado.telefono;
+        asesor.datosPersonales.privado.username = body.asesor.datosPersonales.privado.username || asesor.datosPersonales.privado.username;
 
-        asesor.datosAcademicos.carrera = req.body.asesor.datosAcademicos.carrera || asesor.datosAcademicos.carrera;
+        asesor.datosAcademicos.carrera = body.asesor.datosAcademicos.carrera || asesor.datosAcademicos.carrera;
 
         const newAsesor = await asesor.save();
         res.status(201).json(newAsesor);
