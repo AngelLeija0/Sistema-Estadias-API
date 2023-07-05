@@ -827,10 +827,10 @@ router.patch('/asesor/perfil/modificar', async (req, res) => {
                     throw new Error('Error al generar el hash de la contraseña');
                 }
                 asesor.datosPersonales.privado.password = hash;
-                await saveAsesor(asesor, res, body);
+                await saveAsesor(asesor, res, req.body);
             });
         } else {
-            await saveAsesor(asesor, res, body);
+            await saveAsesor(asesor, res, req.body);
         }
     } catch (error) {
         res.status(400).json({ message: error.message });
