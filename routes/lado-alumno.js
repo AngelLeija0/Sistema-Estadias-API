@@ -36,6 +36,7 @@ router.post('/cpa', async (req, res) => {
         console.log(req.body.idAlumno);
         console.log(estadia);
         console.log(estadia.cartaPresentacion);
+        console.log(Object.keys(estadia.cartaPresentacion).length);
         if (estadia.cartaPresentacion !== null && estadia.cartaPresentacion !== undefined) {
             const infoCPA = {
                 estado: {
