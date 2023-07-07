@@ -775,6 +775,7 @@ router.post('/asesores/crear', async (req, res) => {
             }
 
             const asesor = new Asesor({
+                estado: req.body.asesor.estado,
                 datosPersonales: {
                     nombres: {
                         nombre: req.body.asesor.datosPersonales.nombres.nombre,
@@ -839,6 +840,8 @@ router.patch('/asesor/perfil/modificar', async (req, res) => {
 
 async function saveAsesor(asesor, res, body) {
     try {
+        asesor.estado = body.asesor.estado || asesor.estado;
+
         asesor.datosPersonales.nombres.nombre = body.asesor.datosPersonales.nombres.nombre || asesor.datosPersonales.nombres.nombre;
         asesor.datosPersonales.nombres.apPaterno = body.asesor.datosPersonales.nombres.apPaterno || asesor.datosPersonales.nombres.apPaterno;
         asesor.datosPersonales.nombres.apMaterno = body.asesor.datosPersonales.nombres.apMaterno || asesor.datosPersonales.nombres.apMaterno;
