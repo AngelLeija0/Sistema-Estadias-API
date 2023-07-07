@@ -684,6 +684,7 @@ router.post('/asesores', async (req, res) => {
                 email: asesor.datosPersonales.privado.email,
                 password: asesor.datosPersonales.privado.password,
                 username: asesor.datosPersonales.privado.username,
+                estado: asesor.estado
             }
             arrAsesores.push(infoAsesor);
         }
@@ -734,6 +735,7 @@ router.post('/asesores/excel', async (req, res) => {
                 email: asesor.datosPersonales.privado.email,
                 password: asesor.datosPersonales.privado.password,
                 username: asesor.datosPersonales.privado.username,
+                estado: asesor.estado
             }
             arrAsesores.push(infoAsesor);
         }
@@ -746,7 +748,8 @@ router.post('/asesores/excel', async (req, res) => {
             { header: 'Nombre', key: 'nombre' },
             { header: 'Apellido paterno', key: 'apPaterno' },
             { header: 'Apellido materno', key: 'apMaterno' },
-            { header: 'Carrera', key: 'carrera' }
+            { header: 'Carrera', key: 'carrera' },
+            { header: 'Estado', key: 'estado'}
         ];
 
         data.forEach((row) => {
