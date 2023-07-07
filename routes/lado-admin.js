@@ -840,6 +840,8 @@ router.patch('/asesor/perfil/modificar', async (req, res) => {
 
 async function saveAsesor(asesor, res, body) {
     try {
+        console.log(asesor.estado);
+        console.log(body.asesor.estado);
         asesor.estado = body.asesor.estado || asesor.estado;
 
         asesor.datosPersonales.nombres.nombre = body.asesor.datosPersonales.nombres.nombre || asesor.datosPersonales.nombres.nombre;
