@@ -5,6 +5,8 @@ const express = require('express');
 const router = express.Router();
 
 const bcrypt = require('bcrypt');
+const { promisify } = require('util');
+const compareAsync = promisify(bcrypt.compare);
 
 const Administrador = require('../models/administrador');
 const Vinculacion = require('../models/vinculador');
@@ -12,7 +14,6 @@ const Asesor = require('../models/asesor');
 const Alumno = require('../models/alumno');
 const Estadia = require('../models/estadia');
 
-// POST - Login
 router.post('/', async (req, res) => {
     try {
         const usuario = req.body.usuario;
@@ -31,15 +32,16 @@ router.post('/', async (req, res) => {
             response.apPaterno = alumno.datosPersonales.nombres.apPaterno;
             response.apMaterno = alumno.datosPersonales.nombres.apMaterno;
 
-            // Buscar si un alumno ya esta en estadias
-            const estadia = Estadia.find({
+            const estadia = await Estadia.findOne({
                 idAlumno: new ObjectId(alumno._id)
             });
-            // Si no existe un alumno en estadia se crea una nueva estadia con ese alumno
-            if (estadia === null || estadia === undefined) {
-                estadia.idAlumno = new ObjectId(alumno._id);
-                estadia.save();
+            if (!estadia) {
+                const newEstadia = new Estadia({
+                    idAlumno: new ObjectId(alumno._id)
+                });
+                await newEstadia.save();
             }
+
             return res.json(response);
         }
 
@@ -47,23 +49,17 @@ router.post('/', async (req, res) => {
             "datosPersonales.privado.username": usuario
         });
         if (asesor !== null && asesor !== undefined) {
-            console.log("Entra al if");
-            bcrypt.compare(password, asesor.datosPersonales.privado.password, (err, isMatch) => {
-                console.log("Comparando password")
-                if (err) {
-                    throw new Error('Error al comparar las contraseñas');
-                }
-                if (isMatch) {
-                    response.tipoUsuario = "asesor";
-                    response.id = asesor._id;
-                    response.nombre = asesor.datosPersonales.nombres.nombre;
-                    response.apPaterno = asesor.datosPersonales.nombres.apPaterno;
-                    response.apMaterno = asesor.datosPersonales.nombres.apMaterno;
-                    return res.json(response);
-                } else {
-                    res.status(401).json("Contraseña incorrecta");
-                }
-            });
+            const isMatch = await compareAsync(password, asesor.datosPersonales.privado.password);
+            if (isMatch) {
+                response.tipoUsuario = "asesor";
+                response.id = asesor._id;
+                response.nombre = asesor.datosPersonales.nombres.nombre;
+                response.apPaterno = asesor.datosPersonales.nombres.apPaterno;
+                response.apMaterno = asesor.datosPersonales.nombres.apMaterno;
+                return res.json(response);
+            } else {
+                return res.status(401).json("Contraseña incorrecta");
+            }
         }
 
         const admin = await Administrador.findOne({
@@ -92,11 +88,12 @@ router.post('/', async (req, res) => {
             return res.json(response);
         }
 
-        res.status(404).json("No se encontro ningun usuario");
+        return res.status(404).json("No se encontró ningún usuario");
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 });
+
 
 
 module.exports = router;
