@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 // Esquema de la colección Asesores
 const asesorSchema = new mongoose.Schema(
   {
+    estado: String,
     datosPersonales: {
       nombres: {
         nombre: String,
