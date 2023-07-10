@@ -96,7 +96,7 @@ router.post('/cpa/crear', async (req, res) => {
         const cpa = {
             estado: {
                 nombre: req.body.cartaPresentacion.estado.nombre,
-                motivo: req.body.estado.motivo,
+                motivo: req.body.cartaPresentacion.estado.motivo,
                 fecha: new Date(req.body.estado.fecha)
             },
             datosAlumno: {
