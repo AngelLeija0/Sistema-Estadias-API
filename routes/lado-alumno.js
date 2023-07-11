@@ -97,7 +97,7 @@ router.post('/cpa/crear', async (req, res) => {
             estado: {
                 nombre: req.body.cartaPresentacion.estado.nombre,
                 motivo: req.body.cartaPresentacion.estado.motivo,
-                fecha: new Date(req.body.estado.fecha)
+                fecha: new Date(req.body.cartaPresentacion.estado.fecha)
             },
             datosAlumno: {
                 nombres: {
@@ -131,7 +131,7 @@ router.post('/cpa/crear', async (req, res) => {
                 nombreEmpresario: req.body.cartaPresentacion.datosEmpresa.nombreEmpresario,
                 puestoEmpresario: req.body.cartaPresentacion.datosEmpresa.puestoEmpresario
             },
-            fechaRegistro: new Date(req.body.fechaRegistro)
+            fechaRegistro: new Date(req.body.cartaPresentacion.fechaRegistro)
         }
         estadia.cartaPresentacion = cpa;
         const updatedEstadia = estadia.save();
