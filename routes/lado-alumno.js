@@ -39,7 +39,7 @@ router.post('/cpa', async (req, res) => {
                 estado: {
                     nombre: estadia.cartaPresentacion.estado.nombre,
                     motivo: estadia.cartaPresentacion.estado.motivo,
-                    fecha: estadia.cartaPresentacion.estado.motivo
+                    fecha: estadia.cartaPresentacion.estado.fecha
                 },
                 datosAlumno: {
                     nombres: {
