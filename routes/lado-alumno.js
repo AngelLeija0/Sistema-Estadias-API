@@ -51,8 +51,8 @@ router.post('/cpa', async (req, res) => {
                         matricula: estadia.cartaPresentacion.datosAlumno.privado.matricula,
                         email: estadia.cartaPresentacion.datosAlumno.privado.email
                     },
-                    telfonoCelular: estadia.cartaPresentacion.datosAlumno.telfonoCelular,
-                    telfonoCasa: estadia.cartaPresentacion.datosAlumno.telfonoCasa,
+                    telefonoCelular: estadia.cartaPresentacion.datosAlumno.telefonoCelular,
+                    telefonoCasa: estadia.cartaPresentacion.datosAlumno.telefonoCasa,
                     nss: estadia.cartaPresentacion.datosAlumno.nss,
                     curp: estadia.cartaPresentacion.datosAlumno.curp
                 },
@@ -109,8 +109,8 @@ router.post('/cpa/crear', async (req, res) => {
                     matricula: req.body.cartaPresentacion.datosAlumno.privado.matricula,
                     email: req.body.cartaPresentacion.datosAlumno.privado.email
                 },
-                telfonoCelular: req.body.cartaPresentacion.datosAlumno.telfonoCelular,
-                telfonoCasa: req.body.cartaPresentacion.datosAlumno.telfonoCasa,
+                telefonoCelular: req.body.cartaPresentacion.datosAlumno.telefonoCelular,
+                telefonoCasa: req.body.cartaPresentacion.datosAlumno.telefonoCasa,
                 nss: req.body.cartaPresentacion.datosAlumno.nss,
                 curp: req.body.cartaPresentacion.datosAlumno.curp
             },
