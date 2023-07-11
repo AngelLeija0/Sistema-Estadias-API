@@ -116,12 +116,12 @@ router.post('/cpa/crear', async (req, res) => {
             },
             datosAcademicos: {
                 datosAcademicosAlumno: {
-                    nivelAcademico: req.body.cartaPresentacion.datosAcademicos.nivelAcademico,
-                    turno: req.body.cartaPresentacion.datosAcademicos.turno,
-                    carrera: req.body.cartaPresentacion.datosAcademicos.carrera,
-                    area: req.body.cartaPresentacion.datosAcademicos.area,
-                    grado: req.body.cartaPresentacion.datosAcademicos.grado,
-                    grupo: req.body.cartaPresentacion.datosAcademicos.grupo
+                    nivelAcademico: req.body.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.nivelAcademico,
+                    turno: req.body.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.turno,
+                    carrera: req.body.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.carrera,
+                    area: req.body.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.area,
+                    grado: req.body.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grado,
+                    grupo: req.body.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grupo
                 },
                 perido: req.body.cartaPresentacion.datosAcademicos.perido,
                 año: req.body.cartaPresentacion.datosAcademicos.año
