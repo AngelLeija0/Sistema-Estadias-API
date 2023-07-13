@@ -65,7 +65,7 @@ router.post('/cpa', async (req, res) => {
                         grado: estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grupo,
                         grupo: estadia.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grado
                     },
-                    perido: estadia.cartaPresentacion.datosAcademicos.perido,
+                    periodo: estadia.cartaPresentacion.datosAcademicos.periodo,
                     año: estadia.cartaPresentacion.datosAcademicos.año
                 },
                 datosEmpresa: {
