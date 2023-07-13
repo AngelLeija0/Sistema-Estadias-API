@@ -329,7 +329,6 @@ router.post('/alumnos/historial', async (req, res) => {
         let alumnos = [];
         const filtro = req.body.filtro;
         const busqueda = {}
-        console.log(filtro);
         if (filtro.año) {
             busqueda["cartaPresentacion.datosAcademicos.año"] = filtro.año;
         }
