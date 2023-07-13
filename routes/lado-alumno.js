@@ -123,7 +123,7 @@ router.post('/cpa/crear', async (req, res) => {
                     grado: req.body.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grado,
                     grupo: req.body.cartaPresentacion.datosAcademicos.datosAcademicosAlumno.grupo
                 },
-                perido: req.body.cartaPresentacion.datosAcademicos.perido,
+                perido: req.body.cartaPresentacion.datosAcademicos.periodo,
                 año: req.body.cartaPresentacion.datosAcademicos.año
             },
             datosEmpresa: {
