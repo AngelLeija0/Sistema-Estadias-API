@@ -11,7 +11,6 @@ const vinculadorSchema = new mongoose.Schema(
       },
       privado: {
         email: String,
-        telfono: String,
         username: String,
         password: String
       }

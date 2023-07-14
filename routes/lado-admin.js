@@ -13,6 +13,8 @@ const bcrypt = require('bcrypt');
 const Estadia = require('../models/estadia');
 const Asesor = require('../models/asesor');
 const Alumno = require('../models/alumno');
+const Vinculador = require('../models/vinculador');
+const vinculador = require('../models/vinculador');
 
 /* Alumnos */
 
@@ -957,6 +959,111 @@ router.patch('/asesor/perfil/alumno/asignar', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+/* Vinculacion */
+
+// POST - Crear nuevo vinculador
+router.post('/vinculador/crear', async (req, res) => {
+    try {
+        const password = req.body.vinculador.datosPersonales.privado.password;
+
+        bcrypt.hash(password, 10, async (err, hash) => {
+            if (err) {
+                throw new Error('Error al generar el hash de la contraseña');
+            }
+            const vinculador = new Vinculador({
+                estado: req.body.vinculador.estado,
+                datosPersonales: {
+                    nombres: {
+                        nombre: req.body.vinculador.datosPersonales.nombres.nombre,
+                        apPaterno: req.body.vinculador.datosPersonales.nombres.apPaterno,
+                        apMaterno: req.body.vinculador.datosPersonales.nombres.apMaterno
+                    },
+                    privado: {
+                        email: req.body.vinculador.datosPersonales.privado.email,
+                        username: req.body.vinculador.datosPersonales.privado.username,
+                        password: hash
+                    }
+                },
+                fechaRegistro: new Date(req.body.vinculador.fechaRegistro)
+            });
+            const newVinculador = await vinculador.save();
+            res.status(201).json(newVinculador);
+        });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// POST - Perfil de vinculador (informacion general)
+router.post('/vinculador/perfil', async (req, res) => {
+    try {
+        const idVinculador = req.body.asesor;
+        const vinculador = await Vinculador.findById(idVinculador);
+        res.json(vinculador);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+router.patch('/vinculador/perfil/modificar', async (req, res) => {
+    try {
+        const idVinculador = req.body.vinculador.idAsesor;
+        const vinculador = await Vinculador.findById(idVinculador);
+
+        const newPassword = req.body.vinculador.datosPersonales.privado.password;
+        const currentPassword = vinculador.datosPersonales.privado.password;
+
+        if (newPassword && newPassword !== currentPassword) {
+            bcrypt.hash(newPassword, 10, async (err, hash) => {
+                if (err) {
+                    throw new Error('Error al generar el hash de la contraseña');
+                }
+                vinculador.datosPersonales.privado.password = hash;
+                await saveVinculador(vinculador, res, req.body);
+            });
+        } else {
+            await saveVinculador(vinculador, res, req.body);
+        }
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+async function saveVinculador(vinculador, res, body) {
+    try {
+        vinculador.estado = body.vinculador.estado || vinculador.estado;
+
+        vinculador.datosPersonales.nombres.nombre = body.vinculador.datosPersonales.nombres.nombre || vinculador.datosPersonales.nombres.nombre;
+        vinculador.datosPersonales.nombres.apPaterno = body.vinculador.datosPersonales.nombres.apPaterno || vinculador.datosPersonales.nombres.apPaterno;
+        vinculador.datosPersonales.nombres.apMaterno = body.vinculador.datosPersonales.nombres.apMaterno || vinculador.datosPersonales.nombres.apMaterno;
+
+        vinculador.datosPersonales.privado.email = body.vinculador.datosPersonales.privado.email || vinculador.datosPersonales.privado.email;
+        vinculador.datosPersonales.privado.username = body.vinculador.datosPersonales.privado.username || vinculador.datosPersonales.privado.username;
+
+        const newVinculador = await vinculador.save();
+        res.status(201).json(newVinculador);
+    } catch (error) {
+        throw new Error('Error al guardar el asesor');
+    }
+}
+
+// DELETE - Borrar asesor
+router.post('/vinculador/perfil/borrar', async (req, res) => {
+    try {
+        const idVinculador = req.body.vinculador;
+        const vinculador = await Vinculador.findByIdAndDelete(idVinculador);
+        if (vinculador) {
+            return res.status(202).json("Vinculador eliminado correctamente");
+        }
+        res.status(204).json();
+    } catch (error) {
+        res.status(204).json({ message: error.message });
+    }
+});
+
+
+/* Estadistica */
 
 // POST - Busqueda de alumnos liberados del proceso de estadias
 router.post('/estadistica-alumnos', async (req, res) => {
