@@ -147,7 +147,7 @@ router.post('/inicio/excel', async (req, res) => {
         });
 
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader('Content-Disposition', 'attachment; filename=alumnos-en-proceso.xlsx');
+        res.setHeader('Content-Disposition', 'attachment; filename=alumnos-asesorados.xlsx');
 
         return workbook.xlsx.write(res).then(() => {
             res.status(200).end();
